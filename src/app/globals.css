@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@theme {
+  /* True Midnight Cyberpunk Palette */
+  --color-abyss: #01040A; 
+  --color-glass: rgba(0, 0, 0, 0.6); 
+  --color-glass-border: rgba(255, 255, 255, 0.05); 
+  
+  /* The High-Voltage Accents */
+  --color-cyan: #00F0FF; 
+  --color-neon-red: #FF003C;  
+  --color-neon-orange: #FF6600; 
+  --color-neon-yellow: #FCE205; 
+  
+  /* Text */
+  --color-starlight: #F8FAFC; 
+  --color-stardust: #64748B;
+
+  /* Custom Fonts */
+  --font-roboto: var(--font-roboto), sans-serif;
+  --font-inter: var(--font-inter-tight), sans-serif;
+}
+
+body {
+  background-color: var(--color-abyss);
+  color: var(--color-starlight);
+}
+
+/* --- CYBERPUNK ACTIVE EFFECTS ENGINE --- */
+
+/* 1. Active Grain Background */
+@keyframes grain-animation {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  30% { transform: translate(7%, -25%); }
+  50% { transform: translate(-15%, 10%); }
+  70% { transform: translate(0%, 15%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+.grain-overlay {
+  position: fixed; top: -50%; left: -50%; right: -50%; bottom: -50%;
+  width: 200%; height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.035; pointer-events: none;
+  animation: grain-animation 8s steps(10) infinite; z-index: 9999;
+}
+
+/* 2. Authentic Cyberpunk 2077 Pull Glitch (Horizontal Only, Very Sporadic) */
+@keyframes pull-glitch {
+  0%, 91%, 100% { transform: translateX(0); text-shadow: none; filter: blur(0); }
+  92% { 
+    transform: translateX(12px); /* White text jerks strictly RIGHT */
+    text-shadow: -18px 0 var(--color-cyan), -30px 0 var(--color-neon-red); /* RGB splits strictly LEFT */
+    filter: blur(1px);
+  }
+  93% { 
+    transform: translateX(-4px); 
+    text-shadow: 10px 0 var(--color-cyan), -10px 0 var(--color-neon-red); 
+  }
+  94% { transform: translateX(0); text-shadow: none; filter: blur(0); }
+  98% { 
+    transform: translateX(16px); 
+    text-shadow: -25px 0 var(--color-neon-red), -15px 0 var(--color-cyan); 
+  }
+  99% { transform: translateX(0); text-shadow: none; }
+}
+.animate-pull-glitch { animation: pull-glitch 5.5s infinite; display: inline-block; }
+
+/* 3. Micro Glitch for Subtitles (Less Frequent) */
+@keyframes cyber-glitch {
+  0%, 92%, 100% { transform: translate(0); text-shadow: none; }
+  93% { transform: translate(-2px, 1px); text-shadow: 2px 0 var(--color-cyan), -2px 0 var(--color-neon-red); }
+  95% { transform: translate(2px, -1px); text-shadow: -2px 0 var(--color-cyan), 2px 0 var(--color-neon-red); }
+  97% { transform: translate(0); text-shadow: none; }
+}
+.animate-micro-glitch { animation: cyber-glitch 6s infinite; display: inline-block; }
+
+/* 4. Exact Color Pulses */
+@keyframes pulse-white { 0%, 100% { filter: drop-shadow(0 0 2px rgba(255,255,255,0.3)); } 50% { filter: drop-shadow(0 0 10px rgba(255,255,255,0.7)); } }
+.pulse-white { animation: pulse-white 3s ease-in-out infinite; }
+
+@keyframes pulse-cyan { 0%, 100% { filter: drop-shadow(0 0 2px var(--color-cyan)); } 50% { filter: drop-shadow(0 0 10px var(--color-cyan)); } }
+.pulse-cyan { animation: pulse-cyan 3s ease-in-out infinite; }
+
+@keyframes pulse-red { 0%, 100% { filter: drop-shadow(0 0 2px var(--color-neon-red)); } 50% { filter: drop-shadow(0 0 12px var(--color-neon-red)); } }
+.pulse-red { animation: pulse-red 3s ease-in-out infinite; }
+
+@keyframes pulse-orange { 0%, 100% { filter: drop-shadow(0 0 2px var(--color-neon-orange)); } 50% { filter: drop-shadow(0 0 12px var(--color-neon-orange)); } }
+.pulse-orange { animation: pulse-orange 3s ease-in-out infinite; }
+
+@keyframes pulse-yellow { 0%, 100% { filter: drop-shadow(0 0 2px var(--color-neon-yellow)); } 50% { filter: drop-shadow(0 0 12px var(--color-neon-yellow)); } }
+.pulse-yellow { animation: pulse-yellow 3s ease-in-out infinite; }
+
+/* Background breathing orbs */
+@keyframes neon-breath { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }
+.animate-neon-breath { animation: neon-breath 5s ease-in-out infinite; }

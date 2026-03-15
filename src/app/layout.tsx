@@ -1,0 +1,40 @@
+import type { Metadata } from "next";
+import { Roboto, Inter_Tight } from "next/font/google";
+import "./globals.css";
+import Navbar from "@/components/Navbar";
+
+// Initialize the new fonts
+const roboto = Roboto({ 
+  weight: ['300', '400', '500', '700'], 
+  subsets: ["latin"], 
+  variable: '--font-roboto' 
+});
+
+const interTight = Inter_Tight({ 
+  weight: ['300', '400', '600', '700'], 
+  subsets: ["latin"], 
+  variable: '--font-inter-tight' 
+});
+
+export const metadata: Metadata = {
+  title: "Fath | Data Professional & Creative",
+  description: "Portfolio of Analytics, Data Science, and Automation",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="scroll-smooth">
+      {/* Apply the font variables to the body */}
+      <body className={`${roboto.variable} ${interTight.variable} font-roboto bg-abyss text-starlight antialiased`}>
+        <Navbar />
+        <main className="w-full">
+          {children}
+        </main>
+      </body>
+    </html>
+  );
+}
