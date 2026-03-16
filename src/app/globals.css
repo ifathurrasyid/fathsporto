@@ -11,6 +11,7 @@
   --color-neon-red: #FF003C;  
   --color-neon-orange: #FF6600; 
   --color-neon-yellow: #FCE205; 
+  --color-white: #FFFFFF; /* Added for Others Category */
   
   /* Text */
   --color-starlight: #F8FAFC; 
@@ -28,7 +29,6 @@ body {
 
 /* --- CYBERPUNK ACTIVE EFFECTS ENGINE --- */
 
-/* 1. Active Grain Background */
 @keyframes grain-animation {
   0%, 100% { transform: translate(0, 0); }
   10% { transform: translate(-5%, -10%); }
@@ -46,28 +46,16 @@ body {
   animation: grain-animation 8s steps(10) infinite; z-index: 9999;
 }
 
-/* 2. Authentic Cyberpunk 2077 Pull Glitch (Horizontal Only, Very Sporadic) */
 @keyframes pull-glitch {
   0%, 91%, 100% { transform: translateX(0); text-shadow: none; filter: blur(0); }
-  92% { 
-    transform: translateX(12px); /* White text jerks strictly RIGHT */
-    text-shadow: -18px 0 var(--color-cyan), -30px 0 var(--color-neon-red); /* RGB splits strictly LEFT */
-    filter: blur(1px);
-  }
-  93% { 
-    transform: translateX(-4px); 
-    text-shadow: 10px 0 var(--color-cyan), -10px 0 var(--color-neon-red); 
-  }
+  92% { transform: translateX(12px); text-shadow: -18px 0 var(--color-cyan), -30px 0 var(--color-neon-red); filter: blur(1px); }
+  93% { transform: translateX(-4px); text-shadow: 10px 0 var(--color-cyan), -10px 0 var(--color-neon-red); }
   94% { transform: translateX(0); text-shadow: none; filter: blur(0); }
-  98% { 
-    transform: translateX(16px); 
-    text-shadow: -25px 0 var(--color-neon-red), -15px 0 var(--color-cyan); 
-  }
+  98% { transform: translateX(16px); text-shadow: -25px 0 var(--color-neon-red), -15px 0 var(--color-cyan); }
   99% { transform: translateX(0); text-shadow: none; }
 }
 .animate-pull-glitch { animation: pull-glitch 5.5s infinite; display: inline-block; }
 
-/* 3. Micro Glitch for Subtitles (Less Frequent) */
 @keyframes cyber-glitch {
   0%, 92%, 100% { transform: translate(0); text-shadow: none; }
   93% { transform: translate(-2px, 1px); text-shadow: 2px 0 var(--color-cyan), -2px 0 var(--color-neon-red); }
@@ -76,7 +64,6 @@ body {
 }
 .animate-micro-glitch { animation: cyber-glitch 6s infinite; display: inline-block; }
 
-/* 4. Exact Color Pulses */
 @keyframes pulse-white { 0%, 100% { filter: drop-shadow(0 0 2px rgba(255,255,255,0.3)); } 50% { filter: drop-shadow(0 0 10px rgba(255,255,255,0.7)); } }
 .pulse-white { animation: pulse-white 3s ease-in-out infinite; }
 
@@ -92,6 +79,11 @@ body {
 @keyframes pulse-yellow { 0%, 100% { filter: drop-shadow(0 0 2px var(--color-neon-yellow)); } 50% { filter: drop-shadow(0 0 12px var(--color-neon-yellow)); } }
 .pulse-yellow { animation: pulse-yellow 3s ease-in-out infinite; }
 
-/* Background breathing orbs */
 @keyframes neon-breath { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }
 .animate-neon-breath { animation: neon-breath 5s ease-in-out infinite; }
+
+/* Custom Scrollbar for Modal */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-abyss); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-cyan); }

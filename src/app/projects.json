@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1, "title": "Turnover Prediction", "category": "HR Analytics",
+    "styles": { "text": "text-neon-orange", "border": "hover:border-neon-orange/50", "pulse": "pulse-orange", "shadow": "hover:shadow-[0_0_30px_#FF6600_inset]", "line": "via-neon-orange" },
+    "summary": "Analyzed outcomes of a problem-solving training initiative to improve future learning activities, ensuring all participants successfully graduated.",
+    "techStack": ["Python", "Jupyter", "Pandas"], "projectUrl": "#",
+    "details": [
+      { "subtitle": "The Context", "content": "HR leadership needed a proactive approach to identify employees at high risk of leaving within the next two quarters.", "gradient": "from-neon-orange/10 via-abyss to-abyss" },
+      { "subtitle": "The Architecture", "content": "Built a predictive model using historical absence, tenure, and performance data processed through Pandas in Jupyter Notebooks.", "gradient": "from-abyss via-neon-orange/5 to-abyss" },
+      { "subtitle": "The Outcome", "content": "Successfully flagged 85% of at-risk employees, allowing HR to intervene with targeted retention strategies.", "gradient": "from-abyss via-abyss to-neon-orange/10" }
+    ]
+  },
+  {
+    "id": 2, "title": "Automated File Decryption Pipeline", "category": "Automation",
+    "styles": { "text": "text-neon-red", "border": "hover:border-neon-red/50", "pulse": "pulse-red", "shadow": "hover:shadow-[0_0_30px_#FF003C_inset]", "line": "via-neon-red" },
+    "summary": "Engineered a Python script to bypass department file encryption by automating the extraction and resaving process of secure documents.",
+    "techStack": ["Python", "Automation"], "projectUrl": "#",
+    "details": [
+      { "subtitle": "The Context", "content": "Daily reports were locked behind tedious manual decryption workflows that cost the team hours every week.", "gradient": "from-neon-red/10 via-abyss to-abyss" },
+      { "subtitle": "The Architecture", "content": "Engineered a secure, locally-run Python automation script to handle bulk file processing and output clean data.", "gradient": "from-abyss via-neon-red/5 to-abyss" },
+      { "subtitle": "The Outcome", "content": "Reduced daily processing time from 2 hours to 45 seconds.", "gradient": "from-abyss via-abyss to-neon-red/10" }
+    ]
+  },
+  {
+    "id": 3, "title": "Management Dashboard", "category": "BI & Dashboards",
+    "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
+    "summary": "Consolidated HR, GA, Labour, and Accounting data into a single source of truth Metabase dashboard, ensuring complex metrics are digestible.",
+    "techStack": ["SQL", "Metabase", "Data Viz"], "projectUrl": "#",
+    "details": [
+      { "subtitle": "The Context", "content": "Leadership lacked a unified view of workforce and financial health, relying on scattered Excel reports.", "gradient": "from-cyan/10 via-abyss to-abyss" },
+      { "subtitle": "The Architecture", "content": "Designed a centralized SQL database layer feeding directly into a live, interactive Metabase instance.", "gradient": "from-abyss via-cyan/5 to-abyss" },
+      { "subtitle": "The Outcome", "content": "Achieved a single source of truth, standardizing KPIs across 4 different departments.", "gradient": "from-abyss via-abyss to-cyan/10" }
+    ]
+  },
+  {
+    "id": 4, "title": "Dynamic QR Code Generator", "category": "Automation",
+    "styles": { "text": "text-neon-yellow", "border": "hover:border-neon-yellow/50", "pulse": "pulse-yellow", "shadow": "hover:shadow-[0_0_30px_#FCE205_inset]", "line": "via-neon-yellow" },
+    "summary": "Built a Python-based utility to generate custom QR codes, featuring automated logo embedding and background removal.",
+    "techStack": ["Python", "Image Processing"], "projectUrl": "#",
+    "details": [
+      { "subtitle": "The Context", "content": "Marketing needed hundreds of custom, trackable QR codes with specific brand logos embedded.", "gradient": "from-neon-yellow/10 via-abyss to-abyss" },
+      { "subtitle": "The Architecture", "content": "Utilized Python image processing libraries to automate transparency generation and batch rendering.", "gradient": "from-abyss via-neon-yellow/5 to-abyss" },
+      { "subtitle": "The Outcome", "content": "Deployed an internal tool that generates 500+ print-ready QR codes in under a minute.", "gradient": "from-abyss via-abyss to-neon-yellow/10" }
+    ]
+  },
+  {
+    "id": 5, "title": "Employees Absence Prediction", "category": "HR Analytics",
+    "styles": { "text": "text-neon-orange", "border": "hover:border-neon-orange/50", "pulse": "pulse-orange", "shadow": "hover:shadow-[0_0_30px_#FF6600_inset]", "line": "via-neon-orange" },
+    "summary": "Using Python, Pandas, and XGBoost with EWMA lag features to predict employee absences for April 2026, assisting leadership in proactive workforce planning.",
+    "techStack": ["Python", "Pandas", "XGBoost", "EWMA"], "projectUrl": "https://github.com/ifathurrasyid/sickness_prediction_EWMA",
+    "details": [
+      { "subtitle": "The Architecture", "content": "Engineered a robust time-series pipeline using Pandas to build Exponentially Weighted Moving Average (EWMA) lag features, feeding into an optimized XGBoost regressor. The model captured complex seasonal sickness trends.", "image": "/sys_img_00.png", "gradient": "from-neon-orange/10 via-abyss to-abyss" },
+      { "subtitle": "Macro Prediction", "content": "The model successfully forecasted overall headcount absences across all 8 manufacturing departments with high accuracy on the out-of-time holdout data.", "image": "/sys_img_01.png", "gradient": "from-abyss via-neon-orange/5 to-abyss" },
+      { "subtitle": "Micro Prediction", "content": "Further granular analysis allowed the system to predict specific illness volumes (e.g., Dyspepsia, Typhoid) to assist the onsite medical clinic with inventory planning.", "image": "/sys_img_02.png", "gradient": "from-abyss via-abyss to-neon-orange/10", "link": "https://github.com/ifathurrasyid/sickness_prediction_EWMA" }
+    ]
+  },
+  {
+    "id": 6, "title": "Absence Dashboard for HoD", "category": "BI & Dashboards",
+    "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
+    "summary": "Designed a Metabase dashboard for HoD to track their employees' absence, ensuring timely decision-making.",
+    "techStack": ["SQL", "Metabase", "Data Viz"], "projectUrl": "#",
+    "details": [
+      { "subtitle": "The Context", "content": "Heads of Departments needed real-time visibility into their specific team's attendance metrics.", "gradient": "from-cyan/10 via-abyss to-abyss" },
+      { "subtitle": "The Architecture", "content": "Built role-based access control (RBAC) SQL views feeding into a localized Metabase reporting structure.", "gradient": "from-abyss via-cyan/5 to-abyss" },
+      { "subtitle": "The Outcome", "content": "Eliminated the daily HR attendance email blast, replacing it with a live self-service portal.", "gradient": "from-abyss via-abyss to-cyan/10" }
+    ]
+  },
+  {
+    "id": 7, "title": "This Website", "category": "Others",
+    "styles": { "text": "text-white", "border": "hover:border-white/50", "pulse": "pulse-white", "shadow": "hover:shadow-[0_0_30px_#FFFFFF_inset]", "line": "via-white" },
+    "summary": "Yes, I made this website using Next.js, Framer Motion, and Tailwind CSS to compile all my projects into one place.",
+    "techStack": ["Next.js", "Framer Motion", "Tailwind CSS"], "projectUrl": "https://github.com/ifathurrasyid/fathsporto",
+    "details": [
+      { "subtitle": "The Context", "content": "Standard CVs and portfolios lack the visceral, interactive depth necessary to truly showcase a technical skillset.", "gradient": "from-white/10 via-abyss to-abyss" },
+      { "subtitle": "The Architecture", "content": "Engineered a Next.js frontend with Tailwind CSS and Framer Motion for extreme Cyberpunk 2077 aesthetics.", "gradient": "from-abyss via-white/5 to-abyss" },
+      { "subtitle": "The Outcome", "content": "A high-performance, responsive digital terminal that serves as both a portfolio and a technical demonstration.", "gradient": "from-abyss via-abyss to-white/10" }
+    ]
+  }
+]

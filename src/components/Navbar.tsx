@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -21,12 +22,15 @@ export default function Navbar() {
   ];
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ${
+    <motion.nav
+      initial={{ y: "-100%" }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+      className={`fixed top-0 left-0 w-full z-50 transition-[background-color,backdrop-filter,border-color,padding,box-shadow] duration-700 ease-in-out border-b ${
         scrolled 
-          /* Changed to bg-abyss/40 for high transparency */
-          ? "bg-abyss/40 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.3)] py-4 border-b border-white/5" 
-          : "bg-transparent py-6"
+          /* The Fix: We use border-white/5 here, and border-transparent below to prevent the tear */
+          ? "bg-abyss/40 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.3)] py-4 border-white/5" 
+          : "bg-transparent backdrop-blur-none py-6 border-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center w-full">
@@ -68,6 +72,6 @@ export default function Navbar() {
         </div>
 
       </div>
-    </nav>
+    </motion.nav>
   );
 }
