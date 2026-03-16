@@ -3,50 +3,70 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import Link from "next/link";
-import mockProjects from "./projects.json";
+// @ts-ignore
+import mockProjectsData from "./projects.json";
 
-// --- THE UPGRADED HOVER-ONLY MATRIX DECODER ---
-const ScrambleHover = ({ defaultText, hoverText }: { defaultText: string, hoverText: string }) => {
+interface Project {
+  id: number; title: string; category: string;
+  styles: { text: string; border: string; pulse: string; shadow: string; line: string; };
+  summary: string; techStack: string[]; projectUrl: string; details: any[];
+}
+const mockProjects: Project[] = mockProjectsData;
+
+// --- HIGH-PERFORMANCE MATRIX ENGINE ---
+const ScrambleText = ({ defaultText, hoverText, isHovering }: { defaultText: string, hoverText: string, isHovering: boolean }) => {
   const [text, setText] = useState(defaultText);
-  const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let timeoutId: NodeJS.Timeout;
     const targetText = isHovering ? hoverText : defaultText;
     let iteration = 0;
-    
-    // Calculates speed so long words and short words both take about ~250ms to decode
-    const step = Math.max(1, targetText.length / 8); 
+    const step = Math.max(1, targetText.length / 10); 
 
-    interval = setInterval(() => {
+    const scramble = () => {
       setText(targetText.split("").map((letter, index) => {
-        if (index < iteration) return targetText[index]; // Lock in correct letter
-        if (targetText[index] === " ") return " "; // Ignore spaces
+        if (index < iteration) return targetText[index];
+        if (targetText[index] === " ") return " ";
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-        return chars[Math.floor(Math.random() * chars.length)]; // Scramble the rest
+        return chars[Math.floor(Math.random() * chars.length)];
       }).join(""));
 
-      if (iteration >= targetText.length) {
-        clearInterval(interval);
-        setText(targetText); // Ensure perfect final string
+      if (iteration < targetText.length) {
+        iteration += step;
+        timeoutId = setTimeout(scramble, 30); 
+      } else {
+        setText(targetText);
       }
-      iteration += step;
-    }, 30); // 30ms ticks = lightning fast smooth transition
-
-    return () => clearInterval(interval);
+    };
+    scramble();
+    return () => clearTimeout(timeoutId);
   }, [isHovering, hoverText, defaultText]);
 
+  return <span>{text}</span>;
+};
+
+// --- BUTTON WRAPPERS ---
+const MatrixButton = ({ href, defaultText, hoverText, className }: any) => {
+  const [isHovered, setIsHovered] = useState(false);
   return (
-    <span 
-      onMouseEnter={() => setIsHovering(true)} 
-      onMouseLeave={() => setIsHovering(false)} 
-      className="inline-block cursor-pointer"
-    >
-      {text}
-    </span>
+    <a href={href} target="_blank" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className={className}>
+      <ScrambleText defaultText={defaultText} hoverText={hoverText} isHovering={isHovered} />
+    </a>
   );
 };
-// ----------------------------------------------
+
+const ContactLink = ({ href, defaultText, hoverText }: any) => {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <a href={href} target="_blank" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="relative overflow-hidden font-roboto text-lg font-light text-stardust hover:text-neon-yellow border-b border-white/5 pb-4 flex justify-between transition-all duration-300 group hover:pl-2 pulse-yellow">
+      {/* GLITCH FIX: min-w-[180px] prevents the container from shrinking and causing the infinite hover loop */}
+      <span className="group-hover:font-bold transition-all min-w-[180px] inline-block">
+        <ScrambleText defaultText={defaultText} hoverText={hoverText} isHovering={isHovered} />
+      </span>
+      <span className="text-neon-yellow transform group-hover:translate-x-2 transition-transform duration-300">→</span>
+    </a>
+  );
+};
 
 const categories = ["All", "HR Analytics", "BI & Dashboards", "Automation", "Others"];
 
@@ -86,16 +106,23 @@ const powerUp: any = {
 
 export default function Home() {
   const [activeFilter, setActiveFilter] = useState("All");
-  const filteredProjects = mockProjects.filter(p => activeFilter === "All" || p.category === activeFilter);
+  const filteredProjects = mockProjects.filter((p: Project) => activeFilter === "All" || p.category === activeFilter);
 
   const [revealState, setRevealState] = useState("encrypted"); 
-  const [selectedProject, setSelectedProject] = useState<any | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [repoHovered, setRepoHovered] = useState(false);
+  const [portfolioHovered, setPortfolioHovered] = useState(false);
 
   const handleReveal = () => {
     if (revealState === "encrypted") {
       setRevealState("decrypting");
       setTimeout(() => { setRevealState("revealed"); }, 1500); 
     }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -109,7 +136,17 @@ export default function Home() {
     );
     const sections = document.querySelectorAll("section[id]");
     sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect(); 
+
+    const handleScroll = () => {
+      // BACK TO TOP FIX: Lowered threshold so it appears quickly
+      setShowBackToTop(window.scrollY > 400); 
+    };
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
@@ -120,13 +157,16 @@ export default function Home() {
       <section id="hero" className="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 max-w-5xl mx-auto w-full relative">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan/10 rounded-full blur-[120px] pointer-events-none animate-neon-breath"></div>
         <motion.div initial="hidden" animate="visible" variants={systemBoot} className="max-w-4xl flex flex-col items-center space-y-6 relative z-10">
-          <motion.div variants={powerUp} className="flex items-center gap-3 mb-2 relative overflow-hidden">
+          
+          {/* DOT GLITCH FIX: Removed overflow-hidden and added p-1 so the pinging animation isn't clipped */}
+          <motion.div variants={powerUp} className="flex items-center gap-3 mb-2 relative p-1">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan"></span>
             </span>
             <span className="block font-roboto text-[10px] tracking-[0.3em] uppercase text-cyan pulse-cyan">Open for Opportunities</span>
           </motion.div>
+
           <motion.span variants={hammerCrash} className="pulse-white inline-block">
             <h1 className="text-5xl md:text-[5.5rem] leading-none font-roboto font-bold tracking-tighter text-starlight uppercase animate-pull-glitch">FATHURRASYID IBRAHIM</h1>
           </motion.span>
@@ -134,8 +174,13 @@ export default function Home() {
             <p className="text-lg md:text-xl text-stardust leading-relaxed font-light max-w-2xl mx-auto block">I translate the complexity of business and people into clarity—through data, through analysis, and through the quiet art of asking the right questions.</p>
           </motion.div>
           <motion.div variants={powerUp} className="pt-10">
-            <Link href="#work" className="relative overflow-hidden inline-block border border-cyan/50 bg-abyss text-cyan px-8 py-4 rounded-sm text-xs font-roboto tracking-[0.2em] font-bold uppercase hover:scale-105 hover:bg-cyan hover:text-abyss active:scale-95 transition-all duration-300 pulse-cyan">
-              <ScrambleHover defaultText="[ Execute Portfolio ]" hoverText="[ 3X3CU73 P0R7F0L10 ]" />
+            <Link 
+              href="#work" 
+              onMouseEnter={() => setPortfolioHovered(true)} 
+              onMouseLeave={() => setPortfolioHovered(false)}
+              className="relative inline-block border border-cyan/50 bg-abyss text-cyan px-8 py-4 rounded-sm text-xs font-roboto tracking-[0.2em] font-bold uppercase hover:scale-105 hover:bg-cyan hover:text-abyss active:scale-95 transition-all duration-300 pulse-cyan"
+            >
+              <ScrambleText defaultText="[ Execute Portfolio ]" hoverText="[ 3X3CU73 P0R7F0L10 ]" isHovering={portfolioHovered} />
             </Link>
           </motion.div>
         </motion.div>
@@ -202,11 +247,13 @@ export default function Home() {
             ))}
           </motion.div>
 
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <AnimatePresence mode="popLayout">
-              {filteredProjects.map((project) => (
+              {filteredProjects.map((project: Project) => (
                 <motion.div 
-                  key={project.id} layoutId={`project-card-${project.id}`} initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash} exit={{ opacity: 0, scale: 0.8, filter: "blur(10px)", transition: { duration: 0.3 } }} onClick={() => setSelectedProject(project)}
+                  key={project.id} 
+                  initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash} exit={{ opacity: 0, scale: 0.8, filter: "blur(10px)", transition: { duration: 0.3 } }} 
+                  onClick={() => setSelectedProject(project)}
                   className={`bg-abyss/30 backdrop-blur-md p-10 rounded-3xl border border-white/5 ${project.styles.border} hover:bg-glass ${project.styles.shadow} hover:scale-[1.04] hover:z-20 transition-all duration-500 group relative flex flex-col h-full text-left overflow-hidden cursor-pointer`}
                 >
                   <div className={`absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent ${project.styles.line} to-transparent transform origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out`}></div>
@@ -221,7 +268,7 @@ export default function Home() {
                 </motion.div>
               ))}
             </AnimatePresence>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -240,61 +287,75 @@ export default function Home() {
             <p className="text-stardust font-light mb-10 max-w-md">Currently open for new opportunities. Whether you need a complex pipeline built or a dashboard simplified, I'm ready to help.</p>
             
             <div className="flex flex-wrap gap-4 mt-8">
-              <a href="/cv-ats.pdf" target="_blank" className="relative overflow-hidden bg-neon-yellow text-abyss px-6 py-4 rounded-full font-roboto text-xs uppercase tracking-[0.2em] font-bold hover:scale-105 active:scale-95 hover:bg-white hover:text-neon-red transition-all duration-300 pulse-yellow">
-                <ScrambleHover defaultText="[ Get CV_ATS ]" hoverText="[ G37 CV_47S ]" />
-              </a>
-              <a href="/cv-visual.pdf" target="_blank" className="relative overflow-hidden border border-white/10 text-neon-yellow px-6 py-4 rounded-full font-roboto text-xs uppercase tracking-[0.2em] font-bold hover:scale-105 active:scale-95 hover:bg-white/5 hover:border-neon-yellow/50 transition-all duration-300 pulse-yellow">
-                <ScrambleHover defaultText="[ Get CV_Visual ]" hoverText="[ G37 CV_V15U4L ]" />
-              </a>
+              <MatrixButton href="/cv-ats.pdf" defaultText="[ Get CV_ATS ]" hoverText="[ G37 CV_47S ]" className="relative overflow-hidden bg-neon-yellow text-abyss px-6 py-4 rounded-full font-roboto text-xs uppercase tracking-[0.2em] font-bold hover:scale-105 active:scale-95 hover:bg-white hover:text-neon-red transition-all duration-300 pulse-yellow" />
+              <MatrixButton href="/cv-visual.pdf" defaultText="[ Get CV_Visual ]" hoverText="[ G37 CV_V15U4L ]" className="relative overflow-hidden border border-white/10 text-neon-yellow px-6 py-4 rounded-full font-roboto text-xs uppercase tracking-[0.2em] font-bold hover:scale-105 active:scale-95 hover:bg-white/5 hover:border-neon-yellow/50 transition-all duration-300 pulse-yellow" />
             </div>
-
           </motion.div>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash} className="flex flex-col gap-6 md:pl-16">
-            <a href="mailto:ifathurra@gmail.com" className="relative overflow-hidden font-roboto text-lg font-light text-stardust hover:text-neon-yellow border-b border-white/5 pb-4 flex justify-between transition-all duration-300 group hover:pl-2 pulse-yellow">
-              <span className="group-hover:font-bold transition-all"><ScrambleHover defaultText="Email" hoverText="3M41L" /></span>
-              <span className="text-neon-yellow transform group-hover:translate-x-2 transition-transform duration-300">→</span>
-            </a>
-            <a href="https://linkedin.com/in/ifathurrasyid" target="_blank" className="relative overflow-hidden font-roboto text-lg font-light text-stardust hover:text-neon-yellow border-b border-white/5 pb-4 flex justify-between transition-all duration-300 group hover:pl-2 pulse-yellow">
-              <span className="group-hover:font-bold transition-all"><ScrambleHover defaultText="LinkedIn" hoverText="L1NK3D1N" /></span>
-              <span className="text-neon-yellow transform group-hover:translate-x-2 transition-transform duration-300">→</span>
-            </a>
-            <a href="https://www.instagram.com/ifathurrasyid/" target="_blank" className="relative overflow-hidden font-roboto text-lg font-light text-stardust hover:text-neon-yellow border-b border-white/5 pb-4 flex justify-between transition-all duration-300 group hover:pl-2 pulse-yellow">
-              <span className="group-hover:font-bold transition-all"><ScrambleHover defaultText="Instagram" hoverText="1N574GR4M" /></span>
-              <span className="text-neon-yellow transform group-hover:translate-x-2 transition-transform duration-300">→</span>
-            </a>
+            <ContactLink href="mailto:ifathurra@gmail.com" defaultText="Email" hoverText="3M41L" />
+            <ContactLink href="https://linkedin.com/in/ifathurrasyid" defaultText="LinkedIn" hoverText="L1NK3D1N" />
+            <ContactLink href="https://www.instagram.com/ifathurrasyid/" defaultText="Instagram" hoverText="1N574GR4M" />
+            <ContactLink href="https://wa.me/6285117171327" defaultText="+62 851-1717-1327" hoverText="WH4754PP" />
           </motion.div>
         </div>
-        <div className="max-w-5xl mx-auto px-6 mt-24 pt-8 flex flex-col md:flex-row justify-between items-center font-roboto text-[9px] tracking-widest text-stardust uppercase relative z-10">
+        <div className="max-w-5xl mx-auto px-6 mt-24 pt-8 pb-10 flex flex-col md:flex-row justify-between items-center font-roboto text-[9px] tracking-widest text-stardust uppercase relative z-10">
           <p>© 2026 Fathurrasyid Ibrahim.</p>
           <p className="text-neon-yellow/60 pulse-yellow">System Online</p>
         </div>
       </section>
 
-      {/* --- THE UPGRADED PARALLAX PROJECT MODAL --- */}
+      {/* FLOATING BACK TO TOP BUTTON (Z-INDEX 100) */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }}
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 z-[100] p-4 rounded-full bg-abyss border border-white/10 text-starlight hover:text-cyan hover:border-cyan hover:bg-cyan/10 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 group"
+          >
+            <svg className="w-5 h-5 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* --- THE LIGHTWEIGHT PARALLAX PROJECT MODAL --- */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div 
             initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
             animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
             exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-abyss/80 p-4 md:p-10"
+            className="fixed inset-0 z-[110] flex items-center justify-center bg-abyss/80 p-4 md:p-10"
             onClick={() => setSelectedProject(null)}
           >
+            {/* LAG FIX: Removed complex morphing, removed nested backdrop blurs. Added simple scale/slide up. */}
             <motion.div 
-              layoutId={`project-card-${selectedProject.id}`}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              initial={{ opacity: 0, scale: 0.98, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98, y: 20 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()} 
-              className="w-full max-w-7xl h-[85vh] bg-abyss border border-white/10 rounded-2xl overflow-hidden flex flex-col relative shadow-[0_0_50px_rgba(0,0,0,0.8)]"
+              className="w-full max-w-7xl h-[85vh] bg-[#03060D] border border-white/10 rounded-2xl overflow-hidden flex flex-col relative shadow-[0_0_50px_rgba(0,0,0,0.8)]"
             >
-              <div className="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-abyss/90 backdrop-blur-md z-50 shrink-0">
+              {/* Solid top bar instead of blurred */}
+              <div className="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-[#010308] z-50 shrink-0">
                 <span className={`font-mono text-xs tracking-[0.2em] uppercase ${selectedProject.styles.text} animate-micro-glitch`}>
                   {selectedProject.title}.exe
                 </span>
                 <div className="flex gap-4">
-                  {/* MATRIX SCRAMBLE WIRED INTO THE REPOSITORY BUTTON */}
                   {selectedProject.projectUrl !== "#" && (
-                    <a href={selectedProject.projectUrl} target="_blank" className={`text-[10px] font-roboto font-bold tracking-widest uppercase border border-white/10 px-6 py-2 rounded-full hover:bg-white/5 transition-colors ${selectedProject.styles.text} flex items-center justify-center min-w-[220px]`}>
-                      <ScrambleHover defaultText="[ Execute_Link ]" hoverText="[ ACCESS_REPO ]" />
+                    <a 
+                      href={selectedProject.projectUrl} target="_blank" 
+                      onMouseEnter={() => setRepoHovered(true)} onMouseLeave={() => setRepoHovered(false)}
+                      className={`group relative text-[10px] font-roboto font-bold tracking-widest uppercase border border-white/10 px-6 py-2 rounded-full hover:bg-white/5 transition-colors ${selectedProject.styles.text} flex items-center justify-center min-w-[220px]`}
+                    >
+                      <span className="absolute left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
+                      </span>
+                      <span className="transform group-hover:translate-x-3 transition-transform duration-300">
+                        <ScrambleText defaultText="[ Execute_Link ]" hoverText="[ ACCESS_REPO ]" isHovering={repoHovered} />
+                      </span>
                     </a>
                   )}
                   <button onClick={() => setSelectedProject(null)} className="text-stardust hover:text-neon-red transition-colors pulse-red font-mono uppercase text-xs tracking-widest">
@@ -305,9 +366,10 @@ export default function Home() {
 
               <div className="flex-1 overflow-y-auto overflow-x-hidden relative scroll-smooth">
                 {selectedProject.details.map((detail: any, idx: number) => (
-                  <div key={idx} className="min-h-[85vh] w-full sticky top-0 flex flex-col md:flex-row bg-abyss border-b border-white/5 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+                  <div key={idx} className="min-h-[85vh] w-full sticky top-0 flex flex-col md:flex-row bg-[#03060D] border-b border-white/5 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
                     
-                    <div className="w-full md:w-[35%] lg:w-[30%] p-10 md:p-14 flex flex-col justify-center bg-abyss/95 backdrop-blur-2xl z-20 border-r border-white/5 shadow-xl">
+                    {/* LAG FIX: Solid color background instead of backdrop-blur-2xl */}
+                    <div className="w-full md:w-[35%] lg:w-[30%] p-10 md:p-14 flex flex-col justify-center bg-[#010308] z-20 border-r border-white/5 shadow-xl">
                       <p className={`font-roboto text-[10px] tracking-[0.4em] uppercase ${selectedProject.styles.text} mb-4 ${selectedProject.styles.pulse}`}>
                         0{idx + 1}_Segment
                       </p>
@@ -317,30 +379,20 @@ export default function Home() {
                       <p className="text-stardust font-light text-lg leading-relaxed">
                         {detail.content}
                       </p>
-                      
-                      {/* GitHub Link Injection for final slide */}
-                      {detail.link && (
-                        <div className="mt-10">
-                          <a href={detail.link} target="_blank" className={`inline-flex items-center gap-3 border px-6 py-3 rounded-full transition-all duration-300 font-mono text-[10px] uppercase tracking-widest ${selectedProject.styles.text} ${selectedProject.styles.border} hover:bg-white/5`}>
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
-                            [ Access_Repository ]
-                          </a>
-                        </div>
-                      )}
                     </div>
 
-                    {/* Right: THE ULTIMATE SAFE-ZONE IMAGE AREA */}
-                    <div className="w-full md:w-[65%] lg:w-[70%] h-[40vh] md:min-h-[85vh] relative overflow-hidden z-10 bg-abyss">
-                      {detail.image ? (
-                        /* Absolutely centered, mathematically impossible to crop */
-                        <img 
-                          src={detail.image} 
-                          alt={detail.subtitle} 
-                          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] object-contain opacity-95 drop-shadow-[0_0_25px_rgba(0,240,255,0.3)] z-30" 
-                        />
-                      ) : (
-                        <div className={`absolute inset-0 bg-gradient-to-br ${detail.gradient} opacity-40 z-10`}></div>
-                      )}
+                    <div className="w-full md:w-[65%] lg:w-[70%] h-[40vh] md:min-h-[85vh] relative overflow-hidden z-10 bg-[#03060D]">
+                      <div className="absolute inset-0 p-8 md:p-16 flex items-center justify-center z-30">
+                        {detail.image ? (
+                          <img 
+                            src={detail.image} 
+                            alt={detail.subtitle} 
+                            className="max-w-full max-h-full object-contain opacity-95 drop-shadow-[0_0_25px_rgba(0,240,255,0.3)]" 
+                          />
+                        ) : (
+                          <div className={`absolute inset-0 bg-gradient-to-br ${detail.gradient} opacity-40 z-10`}></div>
+                        )}
+                      </div>
 
                       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px] pointer-events-none opacity-40 z-40"></div>
                       <div className="absolute inset-0 grain-overlay opacity-20 pointer-events-none z-40"></div>
