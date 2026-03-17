@@ -50,12 +50,13 @@
   {
     "id": 4, "title": "Dynamic QR Code Generator", "category": "Automation",
     "styles": { "text": "text-neon-yellow", "border": "hover:border-neon-yellow/50", "pulse": "pulse-yellow", "shadow": "hover:shadow-[0_0_30px_#FCE205_inset]", "line": "via-neon-yellow" },
-    "summary": "Built a Python-based utility to generate custom QR codes, featuring automated logo embedding and background removal.",
-    "techStack": ["Python", "Image Processing"], "projectUrl": "#",
+    "summary": "Engineered a dynamic Python utility for bulk QR code generation, featuring automated logo embedding, background transparency processing, and OS-agnostic pathing.",
+    "techStack": ["Python", "Pillow (PIL)", "Automation"], "projectUrl": "https://github.com/ifathurrasyid/qr_code_generator",
+    "image": "/qr_demo.png",
     "details": [
-      { "subtitle": "The Context", "content": "Marketing needed hundreds of custom, trackable QR codes with specific brand logos embedded.", "gradient": "from-neon-yellow/10 via-abyss to-abyss" },
-      { "subtitle": "The Architecture", "content": "Utilized Python image processing libraries to automate transparency generation and batch rendering.", "gradient": "from-abyss via-neon-yellow/5 to-abyss" },
-      { "subtitle": "The Outcome", "content": "Deployed an internal tool that generates 500+ print-ready QR codes in under a minute.", "gradient": "from-abyss via-abyss to-neon-yellow/10" }
+      { "subtitle": "The Context", "content": "Marketing needed hundreds of custom, trackable QR codes with specific brand logos embedded, but manual generation was causing severe bottlenecks.", "gradient": "from-neon-yellow/10 via-abyss to-abyss" },
+      { "subtitle": "The Architecture", "content": "Built a scalable Python script using the 'qrcode' and 'Pillow' libraries to automate matrix generation, mathematically calculate aspect ratios for logo injection, and process alpha channels.", "gradient": "from-abyss via-neon-yellow/5 to-abyss" },
+      { "subtitle": "The Outcome", "content": "Deployed a fully OS-agnostic internal tool capable of rendering high-fidelity, branded QR codes in seconds, completely eliminating manual graphic design work.", "gradient": "from-abyss via-abyss to-neon-yellow/10" }
     ]
   },
   {
