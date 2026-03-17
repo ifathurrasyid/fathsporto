@@ -1,13 +1,28 @@
 [
   {
-    "id": 1, "title": "Turnover Prediction", "category": "HR Analytics",
+    "id": 1, "title": "HR Turnover Prediction (Flight Risk Engine)", "category": "HR Analytics",
     "styles": { "text": "text-neon-orange", "border": "hover:border-neon-orange/50", "pulse": "pulse-orange", "shadow": "hover:shadow-[0_0_30px_#FF6600_inset]", "line": "via-neon-orange" },
-    "summary": "Analyzed outcomes of a problem-solving training initiative to improve future learning activities, ensuring all participants successfully graduated.",
-    "techStack": ["Python", "Jupyter", "Pandas"], "projectUrl": "#",
+    "summary": "An XGBoost predictive engine identifying high-risk employees with ~70% recall. Features SHAP explainability to translate machine learning into actionable executive strategy.",
+    "techStack": ["Python", "XGBoost", "SHAP", "Scikit-Learn"], "projectUrl": "https://github.com/ifathurrasyid/turnover_prediction_xgboost_SHAP",
     "details": [
-      { "subtitle": "The Context", "content": "HR leadership needed a proactive approach to identify employees at high risk of leaving within the next two quarters.", "gradient": "from-neon-orange/10 via-abyss to-abyss" },
-      { "subtitle": "The Architecture", "content": "Built a predictive model using historical absence, tenure, and performance data processed through Pandas in Jupyter Notebooks.", "gradient": "from-abyss via-neon-orange/5 to-abyss" },
-      { "subtitle": "The Outcome", "content": "Successfully flagged 85% of at-risk employees, allowing HR to intervene with targeted retention strategies.", "gradient": "from-abyss via-abyss to-neon-orange/10" }
+      { 
+        "subtitle": "1. The Imbalance Trap", 
+        "content": "Standard ML models fail in HR by defaulting to a 50% threshold, ignoring severe class imbalance. We trained a Baseline vs. Weighted XGBoost model to demonstrate how penalizing the majority class reshapes predictions.", 
+        "image": "assets/images/model_comparison.png", 
+        "gradient": "from-neon-orange/10 via-abyss to-abyss" 
+      },
+      { 
+        "subtitle": "2. Threshold Optimization", 
+        "content": "Missing a quitter costs ~$15,000, while checking on a happy employee costs a $10 cup of coffee. We mathematically shifted the decision threshold down to 25%, maximizing business ROI and capturing ~70% of actual flight risks.", 
+        "image": "assets/images/custom_threshold.png", 
+        "gradient": "from-abyss via-neon-orange/5 to-abyss" 
+      },
+      { 
+        "subtitle": "3. Executive SHAP Insights", 
+        "content": "Extracted global feature importance using SHAP to prove mathematically to HR leadership that 'OverTime' (Burnout) and 'Stock Option Levels' (Golden Handcuffs) are much stronger attrition drivers than base salary.", 
+        "image": "assets/images/shap_summary.png", 
+        "gradient": "from-abyss via-abyss to-neon-orange/10" 
+      }
     ]
   },
   {
