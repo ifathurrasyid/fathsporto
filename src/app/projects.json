@@ -8,19 +8,19 @@
       { 
         "subtitle": "1. The Imbalance Trap", 
         "content": "Standard ML models fail in HR by defaulting to a 50% threshold, ignoring severe class imbalance. We trained a Baseline vs. Weighted XGBoost model to demonstrate how penalizing the majority class reshapes predictions.", 
-        "image": "assets/images/model_comparison.png", 
+        "image": "/model_comparison.png", 
         "gradient": "from-neon-orange/10 via-abyss to-abyss" 
       },
       { 
         "subtitle": "2. Threshold Optimization", 
         "content": "Missing a quitter costs ~$15,000, while checking on a happy employee costs a $10 cup of coffee. We mathematically shifted the decision threshold down to 25%, maximizing business ROI and capturing ~70% of actual flight risks.", 
-        "image": "assets/images/custom_threshold.png", 
+        "image": "/custom_threshold.png", 
         "gradient": "from-abyss via-neon-orange/5 to-abyss" 
       },
       { 
         "subtitle": "3. Executive SHAP Insights", 
         "content": "Extracted global feature importance using SHAP to prove mathematically to HR leadership that 'OverTime' (Burnout) and 'Stock Option Levels' (Golden Handcuffs) are much stronger attrition drivers than base salary.", 
-        "image": "assets/images/shap_summary.png", 
+        "image": "/shap_summary.png", 
         "gradient": "from-abyss via-abyss to-neon-orange/10" 
       }
     ]
