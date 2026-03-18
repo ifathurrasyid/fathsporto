@@ -8,19 +8,19 @@
       { 
         "subtitle": "1. The Imbalance Trap", 
         "content": "Standard ML models fail in HR by defaulting to a 50% threshold, ignoring severe class imbalance. We trained a Baseline vs. Weighted XGBoost model to demonstrate how penalizing the majority class reshapes predictions.", 
-        "image": "/model_comparison.png", 
+        "image": "/employee_attrition_shap/model_comparison.png", 
         "gradient": "from-neon-orange/10 via-abyss to-abyss" 
       },
       { 
         "subtitle": "2. Threshold Optimization", 
         "content": "Missing a quitter costs ~$15,000, while checking on a happy employee costs a $10 cup of coffee. We mathematically shifted the decision threshold down to 25%, maximizing business ROI and capturing ~70% of actual flight risks.", 
-        "image": "/custom_threshold.png", 
+        "image": "/employee_attrition_shap/custom_threshold.png", 
         "gradient": "from-abyss via-neon-orange/5 to-abyss" 
       },
       { 
         "subtitle": "3. Executive SHAP Insights", 
         "content": "Extracted global feature importance using SHAP to prove mathematically to HR leadership that 'OverTime' (Burnout) and 'Stock Option Levels' (Golden Handcuffs) are much stronger attrition drivers than base salary.", 
-        "image": "/shap_summary.png", 
+        "image": "/employee_attrition_shap/shap_summary.png", 
         "gradient": "from-abyss via-abyss to-neon-orange/10" 
       }
     ]
@@ -52,7 +52,7 @@
     "styles": { "text": "text-neon-yellow", "border": "hover:border-neon-yellow/50", "pulse": "pulse-yellow", "shadow": "hover:shadow-[0_0_30px_#FCE205_inset]", "line": "via-neon-yellow" },
     "summary": "Engineered a dynamic Python utility for bulk QR code generation, featuring automated logo embedding, background transparency processing, and OS-agnostic pathing.",
     "techStack": ["Python", "Pillow (PIL)", "Automation"], "projectUrl": "https://github.com/ifathurrasyid/qr_code_generator",
-    "image": "/qr_demo.png",
+    "image": "/qr_code_generator/qr_demo.png",
     "details": [
       { "subtitle": "The Context", "content": "Marketing needed hundreds of custom, trackable QR codes with specific brand logos embedded, but manual generation was causing severe bottlenecks.", "gradient": "from-neon-yellow/10 via-abyss to-abyss" },
       { "subtitle": "The Architecture", "content": "Built a scalable Python script using the 'qrcode' and 'Pillow' libraries to automate matrix generation, mathematically calculate aspect ratios for logo injection, and process alpha channels.", "gradient": "from-abyss via-neon-yellow/5 to-abyss" },
@@ -65,9 +65,9 @@
     "summary": "Using Python, Pandas, and XGBoost with EWMA lag features to predict employee absences for April 2026, assisting leadership in proactive workforce planning.",
     "techStack": ["Python", "Pandas", "XGBoost", "EWMA"], "projectUrl": "https://github.com/ifathurrasyid/sickness_prediction_EWMA",
     "details": [
-      { "subtitle": "The Architecture", "content": "Engineered a robust time-series pipeline using Pandas to build Exponentially Weighted Moving Average (EWMA) lag features, feeding into an optimized XGBoost regressor. The model captured complex seasonal sickness trends.", "image": "/sys_img_00.png", "gradient": "from-neon-orange/10 via-abyss to-abyss" },
-      { "subtitle": "Macro Prediction", "content": "The model successfully forecasted overall headcount absences across all 8 manufacturing departments with high accuracy on the out-of-time holdout data.", "image": "/sys_img_01.png", "gradient": "from-abyss via-neon-orange/5 to-abyss" },
-      { "subtitle": "Micro Prediction", "content": "Further granular analysis allowed the system to predict specific illness volumes (e.g., Dyspepsia, Typhoid) to assist the onsite medical clinic with inventory planning.", "image": "/sys_img_02.png", "gradient": "from-abyss via-abyss to-neon-orange/10", "link": "https://github.com/ifathurrasyid/sickness_prediction_EWMA" }
+      { "subtitle": "The Architecture", "content": "Engineered a robust time-series pipeline using Pandas to build Exponentially Weighted Moving Average (EWMA) lag features, feeding into an optimized XGBoost regressor. The model captured complex seasonal sickness trends.", "image": "/sickness_prediction_ewma/sys_img_00.png", "gradient": "from-neon-orange/10 via-abyss to-abyss" },
+      { "subtitle": "Macro Prediction", "content": "The model successfully forecasted overall headcount absences across all 8 manufacturing departments with high accuracy on the out-of-time holdout data.", "image": "/sickness_prediction_ewma/sys_img_01.png", "gradient": "from-abyss via-neon-orange/5 to-abyss" },
+      { "subtitle": "Micro Prediction", "content": "Further granular analysis allowed the system to predict specific illness volumes (e.g., Dyspepsia, Typhoid) to assist the onsite medical clinic with inventory planning.", "image": "/sickness_prediction_ewma/sys_img_02.png", "gradient": "from-abyss via-abyss to-neon-orange/10", "link": "https://github.com/ifathurrasyid/sickness_prediction_EWMA" }
     ]
   },
   {
@@ -90,6 +90,33 @@
       { "subtitle": "The Context", "content": "Standard CVs and portfolios lack the visceral, interactive depth necessary to truly showcase a technical skillset.", "gradient": "from-white/10 via-abyss to-abyss" },
       { "subtitle": "The Architecture", "content": "Engineered a Next.js frontend with Tailwind CSS and Framer Motion for extreme Cyberpunk 2077 aesthetics.", "gradient": "from-abyss via-white/5 to-abyss" },
       { "subtitle": "The Outcome", "content": "A high-performance, responsive digital terminal that serves as both a portfolio and a technical demonstration.", "gradient": "from-abyss via-abyss to-white/10" }
+    ]
+  },
+  {
+    "id": 8, "title": "Wishful Bazaar Performance Dashboard", "category": "BI & Dashboards",
+    "styles": { "text": "text-purple-400", "border": "hover:border-purple-500/50", "pulse": "pulse-purple", "shadow": "hover:shadow-[0_0_30px_#A855F7_inset]", "line": "via-purple-500" },
+    "summary": "An interactive, executive-level Tableau dashboard tracking core retail KPIs, sales trends, and profitability metrics for the Wishful Bazaar dataset.",
+    "techStack": ["Tableau", "Data Viz", "Business Intelligence"], "projectUrl": "https://public.tableau.com/views/W9W10IntermediateAssignment_17341667593720/Dashboard",
+    "image": "/wishful_bazaar/wishful_bazaar_dashboard.png",
+    "details": [
+      { 
+        "subtitle": "1. Trend & Granular Analysis", 
+        "content": "Incorporated time-series analysis and categorical breakdowns to allow category managers to drill down into specific product lines and identify seasonal purchasing trends.", 
+        "image": "/wishful_bazaar/preview_1.png", 
+        "gradient": "from-purple-500/10 via-abyss to-abyss" 
+      },
+      { 
+        "subtitle": "2. Interactive Data Discovery", 
+        "content": "Implemented dynamic filtering and cross-highlighting, empowering non-technical business users to actively explore the data and answer their own ad-hoc queries without writing SQL.", 
+        "image": "/wishful_bazaar/preview_2.png", 
+        "gradient": "from-abyss via-purple-500/5 to-abyss" 
+      },
+      { 
+        "subtitle": "3. The Executive Dashboard", 
+        "content": "Stakeholders needed a centralized, interactive view of overarching retail performance. Designed a top-down Tableau dashboard focusing on immediate visibility into revenue streams and profit margins.", 
+        "image": "/wishful_bazaar/wishful_bazaar_dashboard.png", 
+        "gradient": "from-abyss via-abyss to-purple-500/10" 
+      }
     ]
   }
 ]
