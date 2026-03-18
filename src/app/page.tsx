@@ -6,8 +6,9 @@ import Link from "next/link";
 // @ts-ignore
 import mockProjectsData from "./projects.json";
 
+// 1. ADDED `linkType?: string;` to the interface
 interface Project {
-  id: number; title: string; category: string;
+  id: number; title: string; category: string; linkType?: string;
   styles: { text: string; border: string; pulse: string; shadow: string; line: string; };
   summary: string; techStack: string[]; projectUrl: string; details: any[];
 }
@@ -59,7 +60,6 @@ const ContactLink = ({ href, defaultText, hoverText }: any) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <a href={href} target="_blank" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className="relative overflow-hidden font-roboto text-lg font-light text-stardust hover:text-neon-yellow border-b border-white/5 pb-4 flex justify-between transition-all duration-300 group hover:pl-2 pulse-yellow">
-      {/* GLITCH FIX: min-w-[180px] prevents the container from shrinking and causing the infinite hover loop */}
       <span className="group-hover:font-bold transition-all min-w-[180px] inline-block">
         <ScrambleText defaultText={defaultText} hoverText={hoverText} isHovering={isHovered} />
       </span>
@@ -138,7 +138,6 @@ export default function Home() {
     sections.forEach((section) => observer.observe(section));
 
     const handleScroll = () => {
-      // BACK TO TOP FIX: Lowered threshold so it appears quickly
       setShowBackToTop(window.scrollY > 400); 
     };
     window.addEventListener("scroll", handleScroll);
@@ -158,7 +157,6 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan/10 rounded-full blur-[120px] pointer-events-none animate-neon-breath"></div>
         <motion.div initial="hidden" animate="visible" variants={systemBoot} className="max-w-4xl flex flex-col items-center space-y-6 relative z-10">
           
-          {/* DOT GLITCH FIX: Removed overflow-hidden and added p-1 so the pinging animation isn't clipped */}
           <motion.div variants={powerUp} className="flex items-center gap-3 mb-2 relative p-1">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan opacity-75"></span>
@@ -329,7 +327,6 @@ export default function Home() {
             className="fixed inset-0 z-[110] flex items-center justify-center bg-abyss/80 p-4 md:p-10"
             onClick={() => setSelectedProject(null)}
           >
-            {/* LAG FIX: Removed complex morphing, removed nested backdrop blurs. Added simple scale/slide up. */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.98, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -338,7 +335,6 @@ export default function Home() {
               onClick={(e) => e.stopPropagation()} 
               className="w-full max-w-7xl h-[85vh] bg-[#03060D] border border-white/10 rounded-2xl overflow-hidden flex flex-col relative shadow-[0_0_50px_rgba(0,0,0,0.8)]"
             >
-              {/* Solid top bar instead of blurred */}
               <div className="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-[#010308] z-50 shrink-0">
                 <span className={`font-mono text-xs tracking-[0.2em] uppercase ${selectedProject.styles.text} animate-micro-glitch`}>
                   {selectedProject.title}.exe
@@ -351,10 +347,26 @@ export default function Home() {
                       className={`group relative text-[10px] font-roboto font-bold tracking-widest uppercase border border-white/10 px-6 py-2 rounded-full hover:bg-white/5 transition-colors ${selectedProject.styles.text} flex items-center justify-center min-w-[220px]`}
                     >
                       <span className="absolute left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
+                        {/* 2. DYNAMIC ICON LOGIC FOR BI TOOLS */}
+                        {selectedProject.linkType === 'tableau' || selectedProject.linkType === 'looker' || selectedProject.linkType === 'metabase' ? (
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 4h6v16H4V4zm8 5h8v11h-8V9zm0-5h8v3h-8V4z" />
+                          </svg>
+                        ) : (
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
+                        )}
                       </span>
                       <span className="transform group-hover:translate-x-3 transition-transform duration-300">
-                        <ScrambleText defaultText="[ Execute_Link ]" hoverText="[ ACCESS_REPO ]" isHovering={repoHovered} />
+                        {/* 3. DYNAMIC HOVER TEXT LOGIC */}
+                        <ScrambleText 
+                          defaultText="[ Execute_Link ]" 
+                          hoverText={
+                            selectedProject.linkType === 'tableau' || selectedProject.linkType === 'looker' || selectedProject.linkType === 'metabase' 
+                              ? "[ ACCESS_DASHBOARD ]" 
+                              : "[ ACCESS_REPO ]"
+                          } 
+                          isHovering={repoHovered} 
+                        />
                       </span>
                     </a>
                   )}
@@ -368,7 +380,6 @@ export default function Home() {
                 {selectedProject.details.map((detail: any, idx: number) => (
                   <div key={idx} className="min-h-[85vh] w-full sticky top-0 flex flex-col md:flex-row bg-[#03060D] border-b border-white/5 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
                     
-                    {/* LAG FIX: Solid color background instead of backdrop-blur-2xl */}
                     <div className="w-full md:w-[35%] lg:w-[30%] p-10 md:p-14 flex flex-col justify-center bg-[#010308] z-20 border-r border-white/5 shadow-xl">
                       <p className={`font-roboto text-[10px] tracking-[0.4em] uppercase ${selectedProject.styles.text} mb-4 ${selectedProject.styles.pulse}`}>
                         0{idx + 1}_Segment
@@ -379,6 +390,24 @@ export default function Home() {
                       <p className="text-stardust font-light text-lg leading-relaxed">
                         {detail.content}
                       </p>
+
+                      {/* 4. NEW LOGIC: RENDER SEGMENT LINK IF IT EXISTS */}
+                      {detail.link && (
+                        <div className="mt-8">
+                          <a 
+                            href={detail.link} 
+                            target="_blank" 
+                            className={`group/link inline-flex items-center gap-3 font-roboto text-xs font-bold uppercase tracking-[0.2em] border border-white/10 px-6 py-3 rounded-full hover:bg-white/5 transition-all duration-300 ${selectedProject.styles.text} hover:scale-105 active:scale-95`}
+                          >
+                            <span>[ {detail.linkText || "EXECUTE_LINK"} ]</span>
+                            <svg className="w-4 h-4 animate-pulse group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        </div>
+                      )}
+                      {/* END OF NEW SEGMENT LINK LOGIC */}
+
                     </div>
 
                     <div className="w-full md:w-[65%] lg:w-[70%] h-[40vh] md:min-h-[85vh] relative overflow-hidden z-10 bg-[#03060D]">

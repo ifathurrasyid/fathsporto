@@ -94,6 +94,7 @@
   },
   {
     "id": 8, "title": "Wishful Bazaar Performance Dashboard", "category": "BI & Dashboards",
+    "linkType": "tableau",
     "styles": { "text": "text-purple-400", "border": "hover:border-purple-500/50", "pulse": "pulse-purple", "shadow": "hover:shadow-[0_0_30px_#A855F7_inset]", "line": "via-purple-500" },
     "summary": "An interactive, executive-level Tableau dashboard tracking core retail KPIs, sales trends, and profitability metrics for the Wishful Bazaar dataset.",
     "techStack": ["Tableau", "Data Viz", "Business Intelligence"], "projectUrl": "https://public.tableau.com/views/W9W10IntermediateAssignment_17341667593720/Dashboard",
@@ -115,7 +116,9 @@
         "subtitle": "3. The Executive Dashboard", 
         "content": "Stakeholders needed a centralized, interactive view of overarching retail performance. Designed a top-down Tableau dashboard focusing on immediate visibility into revenue streams and profit margins.", 
         "image": "/wishful_bazaar/wishful_bazaar_dashboard.png", 
-        "gradient": "from-abyss via-abyss to-purple-500/10" 
+        "gradient": "from-abyss via-abyss to-purple-500/10",
+        "link": "https://docs.google.com/presentation/d/1evPI6fQBgl5v9D7R1Ea15J0KK0Z7sK7o5JvFyGFOVX0/edit?usp=sharing",
+        "linkText": "View Analysis Deck"
       }
     ]
   }
