@@ -5,14 +5,31 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import Link from "next/link";
 // @ts-ignore
 import mockProjectsData from "./projects.json";
+// @ts-ignore
+import mockCareerData from "./career.json";
+// @ts-ignore
+import mockCertsData from "./certs.json";
 
-// 1. ADDED `linkType?: string;` to the interface
 interface Project {
   id: number; title: string; category: string; linkType?: string;
   styles: { text: string; border: string; pulse: string; shadow: string; line: string; };
   summary: string; techStack: string[]; projectUrl: string; details: any[];
 }
+
+interface Career {
+  id: string; title: string; company: string; period: string;
+  styles: { glow: string; border: string; text: string; };
+  modalContent: string[];
+}
+
+interface Cert {
+  id: string; title: string; issuer: string; date: string; link: string;
+  styles: { glow: string; border: string; text: string; };
+}
+
 const mockProjects: Project[] = mockProjectsData;
+const careerLogs: Career[] = mockCareerData;
+const certsLogs: Cert[] = mockCertsData;
 
 // --- HIGH-PERFORMANCE MATRIX ENGINE ---
 const ScrambleText = ({ defaultText, hoverText, isHovering }: { defaultText: string, hoverText: string, isHovering: boolean }) => {
@@ -44,6 +61,41 @@ const ScrambleText = ({ defaultText, hoverText, isHovering }: { defaultText: str
   }, [isHovering, hoverText, defaultText]);
 
   return <span>{text}</span>;
+};
+
+// --- ANIMATED PROJECT THUMBNAIL ENGINE ---
+const AnimatedThumbnail = ({ details }: { details: any[] }) => {
+  const images = details.filter((d: any) => d.image).map((d: any) => d.image);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [images]);
+
+  if (images.length === 0) {
+    return <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-20 z-0"></div>;
+  }
+
+  return (
+    <div className="absolute inset-0 overflow-hidden opacity-30 group-hover:opacity-70 transition-opacity duration-700 z-0 pointer-events-none mix-blend-luminosity">
+      <AnimatePresence mode="popLayout">
+        <motion.img
+          key={currentIndex}
+          src={images[currentIndex]}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-gradient-to-t from-[#01040A] via-[#01040A]/80 to-transparent"></div>
+    </div>
+  );
 };
 
 // --- BUTTON WRAPPERS ---
@@ -110,6 +162,7 @@ export default function Home() {
 
   const [revealState, setRevealState] = useState("encrypted"); 
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedCareer, setSelectedCareer] = useState<Career | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [repoHovered, setRepoHovered] = useState(false);
   const [portfolioHovered, setPortfolioHovered] = useState(false);
@@ -121,9 +174,7 @@ export default function Home() {
     }
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const scrollToTop = () => { window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -137,9 +188,7 @@ export default function Home() {
     const sections = document.querySelectorAll("section[id]");
     sections.forEach((section) => observer.observe(section));
 
-    const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 400); 
-    };
+    const handleScroll = () => { setShowBackToTop(window.scrollY > 400); };
     window.addEventListener("scroll", handleScroll);
 
     return () => {
@@ -149,14 +198,13 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col w-full selection:bg-neon-red/40 selection:text-white relative overflow-x-hidden">
-      <div className="grain-overlay"></div>
+    <div className="flex flex-col w-full selection:bg-neon-red/40 selection:text-white relative overflow-x-hidden bg-[#01040A]">
+      <div className="grain-overlay z-0 pointer-events-none"></div>
       
-      {/* SECTION 1: HERO */}
-      <section id="hero" className="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 max-w-5xl mx-auto w-full relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan/10 rounded-full blur-[120px] pointer-events-none animate-neon-breath"></div>
+      {/* SECTION 1: HERO -> Fades directly into Neon Red */}
+      <section id="hero" className="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 w-full relative bg-gradient-to-b from-cyan/3 to-neon-red/3">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan/10 rounded-full blur-[120px] pointer-events-none animate-neon-breath z-0"></div>
         <motion.div initial="hidden" animate="visible" variants={systemBoot} className="max-w-4xl flex flex-col items-center space-y-6 relative z-10">
-          
           <motion.div variants={powerUp} className="flex items-center gap-3 mb-2 relative p-1">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan opacity-75"></span>
@@ -164,7 +212,6 @@ export default function Home() {
             </span>
             <span className="block font-roboto text-[10px] tracking-[0.3em] uppercase text-cyan pulse-cyan">Open for Opportunities</span>
           </motion.div>
-
           <motion.span variants={hammerCrash} className="pulse-white inline-block">
             <h1 className="text-5xl md:text-[5.5rem] leading-none font-roboto font-bold tracking-tighter text-starlight uppercase animate-pull-glitch">FATHURRASYID IBRAHIM</h1>
           </motion.span>
@@ -184,11 +231,9 @@ export default function Home() {
         </motion.div>
       </section>
 
-      <div className="w-full h-16 bg-gradient-to-b from-transparent via-neon-red/10 to-transparent pointer-events-none"></div>
-
-      {/* SECTION 2: ABOUT */}
-      <section id="about" className="py-20 flex items-center justify-center scroll-mt-24 relative">
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-neon-red/5 rounded-full blur-[100px] pointer-events-none animate-neon-breath" style={{ animationDelay: '1s' }}></div>
+      {/* SECTION 2: ABOUT -> Starts Red, ends Orange */}
+      <section id="about" className="py-20 flex items-center justify-center scroll-mt-24 relative w-full bg-gradient-to-b from-neon-red/3 to-neon-orange/3">
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-neon-red/5 rounded-full blur-[100px] pointer-events-none animate-neon-breath z-0" style={{ animationDelay: '1s' }}></div>
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center w-full relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false, margin: "-50px" }} variants={extremeCrash}>
             <p className="font-roboto text-[10px] tracking-[0.4em] uppercase text-neon-red mb-4 pulse-red">01_The_Human</p>
@@ -207,7 +252,6 @@ export default function Home() {
             <div className={`absolute inset-0 transition-all duration-1000 z-0 ${revealState === "revealed" ? "opacity-100 blur-0" : "opacity-0 blur-xl scale-125"}`}>
               <img src="/my_portrait/fath_portrait.png" alt="Fathurrasyid Ibrahim" className="absolute inset-0 w-full h-full object-cover opacity-60 grayscale contrast-125 group-hover:opacity-100 group-hover:grayscale-0 group-hover:contrast-100 transform scale-100 group-hover:scale-150 transition-all duration-700 ease-out" />
               <div className="absolute inset-0 bg-gradient-to-tr from-cyan/30 to-neon-red/30 mix-blend-overlay group-hover:opacity-0 transition-opacity duration-700 pointer-events-none"></div>
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.3)_50%)] bg-[length:100%_4px] pointer-events-none opacity-60 group-hover:opacity-20 transition-opacity duration-700"></div>
             </div>
             <div className={`absolute inset-0 z-20 flex flex-col items-center justify-center bg-abyss/90 backdrop-blur-xl transition-opacity duration-500 ${revealState !== "encrypted" ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
                <div className="absolute inset-0 grain-overlay opacity-30"></div>
@@ -223,11 +267,9 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="w-full h-16 bg-gradient-to-b from-transparent via-neon-orange/10 to-transparent pointer-events-none"></div>
-
-      {/* SECTION 3: WORK */}
-      <section id="work" className="py-20 scroll-mt-24 relative">
-        <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-neon-orange/5 rounded-full blur-[120px] pointer-events-none animate-neon-breath"></div>
+      {/* SECTION 3: WORK -> Starts Orange, ends Cyan */}
+      <section id="work" className="py-20 scroll-mt-24 relative w-full bg-gradient-to-b from-neon-orange/3 to-cyan/3">
+        <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-neon-orange/5 rounded-full blur-[120px] pointer-events-none animate-neon-breath z-0"></div>
         <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash} className="mb-12 max-w-5xl mx-auto">
             <p className="font-roboto text-[10px] tracking-[0.4em] uppercase text-neon-orange mb-4 pulse-orange">02_Data_Library</p>
@@ -254,14 +296,19 @@ export default function Home() {
                   onClick={() => setSelectedProject(project)}
                   className={`bg-abyss/30 backdrop-blur-md p-10 rounded-3xl border border-white/5 ${project.styles.border} hover:bg-glass ${project.styles.shadow} hover:scale-[1.04] hover:z-20 transition-all duration-500 group relative flex flex-col h-full text-left overflow-hidden cursor-pointer`}
                 >
-                  <div className={`absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent ${project.styles.line} to-transparent transform origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out`}></div>
-                  <span className={`font-roboto text-[10px] ${project.styles.text} uppercase tracking-widest mb-4 block ${project.styles.pulse}`}>{project.category}</span>
-                  <h3 className="text-3xl font-inter font-semibold text-starlight mb-4 group-hover:animate-micro-glitch">{project.title}</h3>
-                  <p className="text-stardust font-light leading-relaxed mb-10 flex-grow text-lg">{project.summary}</p>
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    {project.techStack.map((tech: string) => (
-                      <span key={tech} className="font-roboto text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-stardust">{tech}</span>
-                    ))}
+                  <div className={`absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent ${project.styles.line} to-transparent transform origin-center scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out z-20`}></div>
+                  
+                  <AnimatedThumbnail details={project.details} />
+                  
+                  <div className="relative z-10 flex flex-col h-full">
+                    <span className={`font-roboto text-[10px] ${project.styles.text} uppercase tracking-widest mb-4 block ${project.styles.pulse}`}>{project.category}</span>
+                    <h3 className="text-3xl font-inter font-semibold text-starlight mb-4 group-hover:animate-micro-glitch">{project.title}</h3>
+                    <p className="text-stardust font-light leading-relaxed mb-10 flex-grow text-lg">{project.summary}</p>
+                    <div className="flex flex-wrap gap-2 mt-auto">
+                      {project.techStack.map((tech: string) => (
+                        <span key={tech} className="font-roboto text-[9px] uppercase tracking-widest px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-stardust">{tech}</span>
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -270,14 +317,99 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="w-full h-16 bg-gradient-to-b from-transparent via-neon-yellow/10 to-transparent pointer-events-none"></div>
+      {/* SECTION 4: CAREER LOGS -> Starts Cyan, ends Purple */}
+      <section id="career" className="py-20 scroll-mt-24 relative overflow-hidden w-full bg-gradient-to-b from-cyan/3 to-purple-500/3">
+        <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-cyan/5 rounded-full blur-[100px] pointer-events-none animate-neon-breath z-0"></div>
+        <div className="max-w-5xl mx-auto px-6 relative z-10">
+          
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash} className="mb-16">
+            <p className="font-roboto text-[10px] tracking-[0.4em] uppercase text-cyan mb-4 pulse-cyan">03_Career_Logs</p>
+            <h2 className="text-4xl md:text-5xl font-inter font-light tracking-tight mb-4 text-starlight">
+              <span>Operational </span> 
+              <span className="inline-block pulse-cyan"><span className="font-bold text-cyan animate-pull-glitch block">History</span></span>
+            </h2>
+          </motion.div>
 
-      {/* SECTION 4: CONTACT */}
-      <section id="contact" className="py-20 scroll-mt-24 relative overflow-hidden">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[800px] h-[300px] bg-neon-yellow/5 rounded-full blur-[100px] pointer-events-none animate-neon-breath" style={{ animationDelay: '1.5s' }}></div>
+          <div className="relative">
+            <div className="absolute left-4 md:left-8 top-0 bottom-0 w-[1px] bg-gradient-to-b from-cyan via-purple-500 to-neon-red opacity-30"></div>
+            
+            <div className="flex flex-col gap-8">
+              {careerLogs.map((log, index) => (
+                <motion.div 
+                  key={log.id} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }} transition={{ delay: index * 0.2, duration: 0.5 }}
+                  onClick={() => setSelectedCareer(log)} className="group relative pl-12 md:pl-24 py-4 cursor-pointer"
+                >
+                  <div className={`absolute left-[11px] md:left-[27px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-abyss border-2 ${log.styles.border} group-hover:scale-[2] group-hover:bg-white transition-all duration-300 z-10`}></div>
+                  
+                  <div className={`bg-abyss/40 backdrop-blur-sm border border-white/5 ${log.styles.border} ${log.styles.glow} p-6 md:p-8 rounded-2xl hover:bg-white/5 transition-all duration-300 transform group-hover:translate-x-2 group-hover:-translate-y-1`}>
+                    <p className={`font-roboto text-[10px] tracking-widest uppercase mb-2 ${log.styles.text}`}>{log.period}</p>
+                    <h3 className="text-2xl font-inter font-bold text-starlight mb-1 group-hover:animate-micro-glitch">{log.title}</h3>
+                    <p className="text-stardust font-light text-sm md:text-base">{log.company}</p>
+                    
+                    <div className="mt-4 flex items-center gap-2 text-[10px] font-roboto tracking-widest uppercase text-white/40 group-hover:text-white/80 transition-colors">
+                      <span>[ Execute_Query ]</span>
+                      <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 5: CLEARANCES -> Starts Purple, ends Neon Yellow */}
+      <section id="clearances" className="py-20 scroll-mt-24 relative overflow-hidden w-full bg-gradient-to-b from-purple-500/3 to-neon-yellow/3">
+        <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] pointer-events-none animate-neon-breath z-0"></div>
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash} className="mb-12">
+            <p className="font-roboto text-[10px] tracking-[0.4em] uppercase text-purple-400 mb-4 pulse-purple">04_Clearances</p>
+            <h2 className="text-4xl md:text-5xl font-inter font-light tracking-tight mb-4 text-starlight">
+              <span>Security </span> 
+              <span className="inline-block pulse-purple"><span className="font-bold text-purple-400 animate-pull-glitch block">Credentials</span></span>
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {certsLogs.map((cert, index) => (
+              <motion.div 
+                key={cert.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }} transition={{ delay: index * 0.2, duration: 0.5 }}
+                className={`relative bg-abyss/40 backdrop-blur-md border border-white/5 ${cert.styles.border} ${cert.styles.glow} p-8 rounded-2xl overflow-hidden group transition-all duration-300 hover:scale-[1.02] flex flex-col`}
+              >
+                <div className="w-3/4 h-5 bg-[repeating-linear-gradient(90deg,transparent,transparent_2px,rgba(255,255,255,0.1)_2px,rgba(255,255,255,0.1)_5px,transparent_5px,transparent_8px,rgba(255,255,255,0.3)_8px,rgba(255,255,255,0.3)_10px)] mb-6 opacity-40 group-hover:opacity-100 transition-opacity"></div>
+                <div className="absolute top-0 left-0 w-full h-[200%] bg-gradient-to-b from-transparent via-white/5 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-[1500ms] ease-in-out z-0 pointer-events-none"></div>
+
+                <div className="relative z-10 flex flex-col h-full">
+                  <p className={`font-mono text-[10px] uppercase tracking-widest ${cert.styles.text} mb-3`}>{cert.issuer} // {cert.date}</p>
+                  <h4 className="text-2xl font-bold text-starlight mb-8 leading-snug group-hover:animate-micro-glitch">{cert.title}</h4>
+                  
+                  <div className="flex justify-between items-center mt-auto pt-5 border-t border-white/5">
+                    <span className="px-3 py-1.5 bg-white/5 text-[10px] leading-none font-roboto font-bold tracking-[0.2em] text-stardust uppercase border border-white/10 rounded-md flex items-center gap-2 shrink-0">
+                      <span className={`w-1.5 h-1.5 rounded-full bg-current ${cert.styles.text} animate-pulse shrink-0`}></span>
+                      Verified
+                    </span>
+                    {cert.link !== "#" && (
+                      <a href={cert.link} target="_blank" className={`text-[10px] font-mono font-bold tracking-widest uppercase hover:text-white transition-colors ${cert.styles.text}`}>
+                        [ View_Record ]
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 6: CONTACT -> Starts Yellow, ends Black */}
+      <section id="contact" className="py-20 scroll-mt-24 relative overflow-hidden w-full bg-gradient-to-b from-neon-yellow/3 to-transparent">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[800px] h-[300px] bg-neon-yellow/5 rounded-full blur-[100px] pointer-events-none animate-neon-breath z-0" style={{ animationDelay: '1.5s' }}></div>
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center w-full relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash}>
-            <p className="font-roboto text-[10px] tracking-[0.4em] uppercase text-neon-yellow mb-4 pulse-yellow">03_Initialize_Contact</p>
+            <p className="font-roboto text-[10px] tracking-[0.4em] uppercase text-neon-yellow mb-4 pulse-yellow">05_Initialize_Contact</p>
             <h2 className="text-4xl md:text-5xl font-inter font-light leading-tight mb-6 text-starlight">
               <span className="block">Let's make</span> 
               <span className="inline-block pulse-yellow"><span className="font-bold text-neon-yellow animate-pull-glitch block">data make sense.</span></span>
@@ -302,7 +434,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FLOATING BACK TO TOP BUTTON (Z-INDEX 100) */}
+      {/* FLOATING BACK TO TOP BUTTON */}
       <AnimatePresence>
         {showBackToTop && (
           <motion.button 
@@ -317,7 +449,54 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* --- THE LIGHTWEIGHT PARALLAX PROJECT MODAL --- */}
+      {/* --- CAREER MODAL (TERMINAL STYLE) --- */}
+      <AnimatePresence>
+        {selectedCareer && (
+          <motion.div 
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(8px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-abyss/80 p-4"
+            onClick={() => setSelectedCareer(null)}
+          >
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              onClick={(e) => e.stopPropagation()} 
+              className={`w-full max-w-2xl bg-[#03060D] border ${selectedCareer.styles.border} ${selectedCareer.styles.glow} rounded-xl overflow-hidden shadow-2xl`}
+            >
+              <div className="px-6 py-4 border-b border-white/5 flex justify-between items-center bg-[#010308]">
+                <div className="flex flex-col">
+                   <span className={`font-mono text-xs tracking-[0.2em] uppercase ${selectedCareer.styles.text} animate-micro-glitch`}>
+                     sys.log.query({selectedCareer.company.replace(/\s+/g, '_')})
+                   </span>
+                </div>
+                <button onClick={() => setSelectedCareer(null)} className="text-stardust hover:text-white transition-colors pulse-white font-mono uppercase text-xs tracking-widest">
+                  [ X ]
+                </button>
+              </div>
+              
+              <div className="p-8 md:p-10 relative">
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.2)_50%)] bg-[length:100%_4px] pointer-events-none opacity-30"></div>
+                <h3 className="text-3xl font-inter font-bold text-starlight mb-2">{selectedCareer.title}</h3>
+                <p className={`font-roboto text-sm tracking-widest uppercase mb-8 ${selectedCareer.styles.text}`}>{selectedCareer.company} // {selectedCareer.period}</p>
+                
+                <div className="space-y-4">
+                  {selectedCareer.modalContent.map((point, idx) => (
+                    <div key={idx} className="flex items-start gap-4">
+                      <span className={`mt-1 font-mono text-xs ${selectedCareer.styles.text}`}>{'>'}</span>
+                      <p className="text-stardust font-light leading-relaxed">{point}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* --- PROJECT PARALLAX MODAL --- */}
       <AnimatePresence>
         {selectedProject && (
           <motion.div 
@@ -347,24 +526,16 @@ export default function Home() {
                       className={`group relative text-[10px] font-roboto font-bold tracking-widest uppercase border border-white/10 px-6 py-2 rounded-full hover:bg-white/5 transition-colors ${selectedProject.styles.text} flex items-center justify-center min-w-[220px]`}
                     >
                       <span className="absolute left-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {/* 2. DYNAMIC ICON LOGIC FOR BI TOOLS */}
                         {selectedProject.linkType === 'tableau' || selectedProject.linkType === 'looker' || selectedProject.linkType === 'metabase' ? (
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M4 4h6v16H4V4zm8 5h8v11h-8V9zm0-5h8v3h-8V4z" />
-                          </svg>
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v16H4V4zm8 5h8v11h-8V9zm0-5h8v3h-8V4z" /></svg>
                         ) : (
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
                         )}
                       </span>
                       <span className="transform group-hover:translate-x-3 transition-transform duration-300">
-                        {/* 3. DYNAMIC HOVER TEXT LOGIC */}
                         <ScrambleText 
                           defaultText="[ Execute_Link ]" 
-                          hoverText={
-                            selectedProject.linkType === 'tableau' || selectedProject.linkType === 'looker' || selectedProject.linkType === 'metabase' 
-                              ? "[ ACCESS_DASHBOARD ]" 
-                              : "[ ACCESS_REPO ]"
-                          } 
+                          hoverText={selectedProject.linkType === 'tableau' || selectedProject.linkType === 'looker' || selectedProject.linkType === 'metabase' ? "[ ACCESS_DASHBOARD ]" : "[ ACCESS_REPO ]"} 
                           isHovering={repoHovered} 
                         />
                       </span>
@@ -379,7 +550,6 @@ export default function Home() {
               <div className="flex-1 overflow-y-auto overflow-x-hidden relative scroll-smooth">
                 {selectedProject.details.map((detail: any, idx: number) => (
                   <div key={idx} className="min-h-[85vh] w-full sticky top-0 flex flex-col md:flex-row bg-[#03060D] border-b border-white/5 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-                    
                     <div className="w-full md:w-[35%] lg:w-[30%] p-10 md:p-14 flex flex-col justify-center bg-[#010308] z-20 border-r border-white/5 shadow-xl">
                       <p className={`font-roboto text-[10px] tracking-[0.4em] uppercase ${selectedProject.styles.text} mb-4 ${selectedProject.styles.pulse}`}>
                         0{idx + 1}_Segment
@@ -390,48 +560,30 @@ export default function Home() {
                       <p className="text-stardust font-light text-lg leading-relaxed">
                         {detail.content}
                       </p>
-
-                      {/* 4. NEW LOGIC: RENDER SEGMENT LINK IF IT EXISTS */}
                       {detail.link && (
                         <div className="mt-8">
-                          <a 
-                            href={detail.link} 
-                            target="_blank" 
-                            className={`group/link inline-flex items-center gap-3 font-roboto text-xs font-bold uppercase tracking-[0.2em] border border-white/10 px-6 py-3 rounded-full hover:bg-white/5 transition-all duration-300 ${selectedProject.styles.text} hover:scale-105 active:scale-95`}
-                          >
+                          <a href={detail.link} target="_blank" className={`group/link inline-flex items-center gap-3 font-roboto text-xs font-bold uppercase tracking-[0.2em] border border-white/10 px-6 py-3 rounded-full hover:bg-white/5 transition-all duration-300 ${selectedProject.styles.text} hover:scale-105 active:scale-95`}>
                             <span>[ {detail.linkText || "EXECUTE_LINK"} ]</span>
-                            <svg className="w-4 h-4 animate-pulse group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
+                            <svg className="w-4 h-4 animate-pulse group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                           </a>
                         </div>
                       )}
-                      {/* END OF NEW SEGMENT LINK LOGIC */}
-
                     </div>
-
                     <div className="w-full md:w-[65%] lg:w-[70%] h-[40vh] md:min-h-[85vh] relative overflow-hidden z-10 bg-[#03060D]">
                       <div className="absolute inset-0 p-8 md:p-16 flex items-center justify-center z-30">
                         {detail.image ? (
-                          <img 
-                            src={detail.image} 
-                            alt={detail.subtitle} 
-                            className="max-w-full max-h-full object-contain opacity-95 drop-shadow-[0_0_25px_rgba(0,240,255,0.3)]" 
-                          />
+                          <img src={detail.image} alt={detail.subtitle} className="max-w-full max-h-full object-contain opacity-95 drop-shadow-[0_0_25px_rgba(0,240,255,0.3)]" />
                         ) : (
                           <div className={`absolute inset-0 bg-gradient-to-br ${detail.gradient} opacity-40 z-10`}></div>
                         )}
                       </div>
-
                       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px] pointer-events-none opacity-40 z-40"></div>
                       <div className="absolute inset-0 grain-overlay opacity-20 pointer-events-none z-40"></div>
                       <div className="absolute inset-4 border border-white/5 rounded-xl pointer-events-none z-50"></div>
-                      
                       <div className="absolute bottom-6 right-6 font-mono text-[8px] tracking-[0.3em] text-white/30 uppercase z-50">
                         {detail.image ? `SYS.IMG.0${idx + 1}` : `SYS.DAT.0${idx + 1}`}
                       </div>
                     </div>
-
                   </div>
                 ))}
               </div>

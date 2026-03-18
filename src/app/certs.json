@@ -1,0 +1,26 @@
+[
+  {
+    "id": "cert-1",
+    "title": "Data Analytics Bootcamp",
+    "issuer": "RevoU / Hacktiv8",
+    "date": "2023",
+    "link": "#",
+    "styles": { "glow": "hover:shadow-[0_0_20px_#00F0FF_inset]", "border": "border-cyan/30 hover:border-cyan", "text": "text-cyan" }
+  },
+  {
+    "id": "cert-2",
+    "title": "Google Data Analytics Professional",
+    "issuer": "Coursera",
+    "date": "2023",
+    "link": "#",
+    "styles": { "glow": "hover:shadow-[0_0_20px_#FCE205_inset]", "border": "border-neon-yellow/30 hover:border-neon-yellow", "text": "text-neon-yellow" }
+  },
+  {
+    "id": "cert-3",
+    "title": "Machine Learning Specialization",
+    "issuer": "Stanford Online",
+    "date": "2024",
+    "link": "#",
+    "styles": { "glow": "hover:shadow-[0_0_20px_#A855F7_inset]", "border": "border-purple-500/30 hover:border-purple-500", "text": "text-purple-400" }
+  }
+]
