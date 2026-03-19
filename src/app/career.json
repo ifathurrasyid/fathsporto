@@ -1,35 +1,41 @@
 [
   {
     "id": "tkg",
-    "title": "Data Analyst",
+    "title": "HR Data Analyst",
     "company": "PT. TKG Taekwang Indonesia",
-    "period": "202X - Present",
+    "period": "Nov 2024 - Present",
     "styles": { "glow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "border": "border-cyan/30 hover:border-cyan", "text": "text-cyan" },
     "modalContent": [
-      "Engineered an XGBoost predictive model for HR turnover, shifting decision thresholds to capture ~70% of flight risks.",
-      "Built centralized Metabase dashboards to consolidate HR, GA, Labour, and Accounting metrics across 4 departments."
+      "Spearheaded a centralised Metabase and SQL dashboard to consolidate HR, GA, Labour, and Finance metrics.",
+      "Orchestrated a new 360 review and performance management system, significantly reducing manual processing.",
+      "Conducted A/B testing to systematically evaluate and optimise key HR initiatives.",
+      "Automated Group Leader (GL) Pool selection using Python, objectively ranking candidates.",
+      "Engineered Python scripts to consolidate fragmented competency data for 2,500+ employees.",
+      "Built predictive models to forecast monthly absenteeism and analysed unique sickness patterns."
     ]
   },
   {
     "id": "mindrift",
-    "title": "AI Tutor",
-    "company": "Mindrift.ai",
-    "period": "April 2024 - Present",
+    "title": "Freelance AI Tutor",
+    "company": "Mindrift",
+    "period": "Apr 2024 - Feb 2025",
     "styles": { "glow": "hover:shadow-[0_0_30px_#A855F7_inset]", "border": "border-purple-500/30 hover:border-purple-500", "text": "text-purple-400" },
     "modalContent": [
-      "Trained and refined AI models remotely, specializing in logic, coding, and analytical reasoning.",
-      "Evaluated machine learning outputs to ensure accuracy and alignment with human-centric problem solving."
+      "Annotated complex datasets to ensure model alignment with strict ethical, safety, and helpfulness standards.",
+      "Validated AI credibility by rigorously cross-referencing generated answers against authoritative sources.",
+      "Benchmarked model performance against leading LLMs to provide actionable refinement feedback."
     ]
   },
   {
     "id": "uwujump",
-    "title": "HR Administrator (Example)",
+    "title": "HR Data Analyst",
     "company": "PT. Uwu Jump Indonesia",
-    "period": "202X - 202X",
+    "period": "Apr 2023 - Jan 2024",
     "styles": { "glow": "hover:shadow-[0_0_30px_#FF003C_inset]", "border": "border-neon-red/30 hover:border-neon-red", "text": "text-neon-red" },
     "modalContent": [
-      "Managed daily HR operations and reporting.",
-      "Add your specific achievements here!"
+      "Consolidated fragmented HR data into a centralised database and designed interactive dashboards.",
+      "Automated Annual Assessments and Personality Profiling via advanced Excel tools, reducing evaluation time by 76.9%.",
+      "Enforced 100% data integrity across Attendance and Demographics through rigorous data cleaning protocols."
     ]
   }
 ]
