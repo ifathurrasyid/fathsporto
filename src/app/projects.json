@@ -1,103 +1,56 @@
 [
   {
-    "id": 1, "title": "HR Turnover Prediction (Flight Risk Engine)", "category": "HR Analytics",
-    "styles": { "text": "text-neon-orange", "border": "hover:border-neon-orange/50", "pulse": "pulse-orange", "shadow": "hover:shadow-[0_0_30px_#FF6600_inset]", "line": "via-neon-orange" },
+    "id": 1,
+    "title": "HR Turnover Prediction (Flight Risk Engine)", 
+    "category": "HR Analytics",
+    "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
     "summary": "An XGBoost predictive engine identifying high-risk employees with ~70% recall. Features SHAP explainability to translate machine learning into actionable executive strategy.",
-    "techStack": ["Python", "XGBoost", "SHAP", "Scikit-Learn"], "projectUrl": "https://github.com/ifathurrasyid/turnover_prediction_xgboost_SHAP",
+    "techStack": ["Python", "XGBoost", "SHAP", "Scikit-Learn"], 
+    "projectUrl": "https://github.com/ifathurrasyid/turnover_prediction_xgboost_SHAP",
     "details": [
       { 
         "subtitle": "1. The Imbalance Trap", 
         "content": "Standard ML models fail in HR by defaulting to a 50% threshold, ignoring severe class imbalance. We trained a Baseline vs. Weighted XGBoost model to demonstrate how penalizing the majority class reshapes predictions.", 
         "image": "/employee_attrition_shap/model_comparison.png", 
-        "gradient": "from-neon-orange/10 via-abyss to-abyss" 
+        "gradient": "from-cyan/10 via-abyss to-abyss" 
       },
       { 
         "subtitle": "2. Threshold Optimization", 
         "content": "Missing a quitter costs ~$15,000, while checking on a happy employee costs a $10 cup of coffee. We mathematically shifted the decision threshold down to 25%, maximizing business ROI and capturing ~70% of actual flight risks.", 
         "image": "/employee_attrition_shap/custom_threshold.png", 
-        "gradient": "from-abyss via-neon-orange/5 to-abyss" 
+        "gradient": "from-abyss via-cyan/5 to-abyss" 
       },
       { 
         "subtitle": "3. Executive SHAP Insights", 
         "content": "Extracted global feature importance using SHAP to prove mathematically to HR leadership that 'OverTime' (Burnout) and 'Stock Option Levels' (Golden Handcuffs) are much stronger attrition drivers than base salary.", 
         "image": "/employee_attrition_shap/shap_summary.png", 
-        "gradient": "from-abyss via-abyss to-neon-orange/10" 
+        "gradient": "from-abyss via-abyss to-cyan/10" 
       }
     ]
   },
   {
-    "id": 2, "title": "Automated File Decryption Pipeline", "category": "Automation",
-    "styles": { "text": "text-neon-red", "border": "hover:border-neon-red/50", "pulse": "pulse-red", "shadow": "hover:shadow-[0_0_30px_#FF003C_inset]", "line": "via-neon-red" },
-    "summary": "Engineered a Python script to bypass department file encryption by automating the extraction and resaving process of secure documents.",
-    "techStack": ["Python", "Automation"], "projectUrl": "#",
-    "details": [
-      { "subtitle": "The Context", "content": "Daily reports were locked behind tedious manual decryption workflows that cost the team hours every week.", "gradient": "from-neon-red/10 via-abyss to-abyss" },
-      { "subtitle": "The Architecture", "content": "Engineered a secure, locally-run Python automation script to handle bulk file processing and output clean data.", "gradient": "from-abyss via-neon-red/5 to-abyss" },
-      { "subtitle": "The Outcome", "content": "Reduced daily processing time from 2 hours to 45 seconds.", "gradient": "from-abyss via-abyss to-neon-red/10" }
-    ]
-  },
-  {
-    "id": 3, "title": "Management Dashboard", "category": "BI & Dashboards",
+    "id": 2, 
+    "title": "Employees Absence Prediction", 
+    "category": "HR Analytics",
     "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
-    "summary": "Consolidated HR, GA, Labour, and Accounting data into a single source of truth Metabase dashboard, ensuring complex metrics are digestible.",
-    "techStack": ["SQL", "Metabase", "Data Viz"], "projectUrl": "#",
-    "details": [
-      { "subtitle": "The Context", "content": "Leadership lacked a unified view of workforce and financial health, relying on scattered Excel reports.", "gradient": "from-cyan/10 via-abyss to-abyss" },
-      { "subtitle": "The Architecture", "content": "Designed a centralized SQL database layer feeding directly into a live, interactive Metabase instance.", "gradient": "from-abyss via-cyan/5 to-abyss" },
-      { "subtitle": "The Outcome", "content": "Achieved a single source of truth, standardizing KPIs across 4 different departments.", "gradient": "from-abyss via-abyss to-cyan/10" }
-    ]
-  },
-  {
-    "id": 4, "title": "Dynamic QR Code Generator", "category": "Automation",
-    "styles": { "text": "text-neon-yellow", "border": "hover:border-neon-yellow/50", "pulse": "pulse-yellow", "shadow": "hover:shadow-[0_0_30px_#FCE205_inset]", "line": "via-neon-yellow" },
-    "summary": "Engineered a dynamic Python utility for bulk QR code generation, featuring automated logo embedding, background transparency processing, and OS-agnostic pathing.",
-    "techStack": ["Python", "Pillow (PIL)", "Automation"], "projectUrl": "https://github.com/ifathurrasyid/qr_code_generator",
-    "image": "/qr_code_generator/qr_demo.png",
-    "details": [
-      { "subtitle": "The Context", "content": "Marketing needed hundreds of custom, trackable QR codes with specific brand logos embedded, but manual generation was causing severe bottlenecks.", "gradient": "from-neon-yellow/10 via-abyss to-abyss" },
-      { "subtitle": "The Architecture", "content": "Built a scalable Python script using the 'qrcode' and 'Pillow' libraries to automate matrix generation, mathematically calculate aspect ratios for logo injection, and process alpha channels.", "gradient": "from-abyss via-neon-yellow/5 to-abyss" },
-      { "subtitle": "The Outcome", "content": "Deployed a fully OS-agnostic internal tool capable of rendering high-fidelity, branded QR codes in seconds, completely eliminating manual graphic design work.", "gradient": "from-abyss via-abyss to-neon-yellow/10" }
-    ]
-  },
-  {
-    "id": 5, "title": "Employees Absence Prediction", "category": "HR Analytics",
-    "styles": { "text": "text-neon-orange", "border": "hover:border-neon-orange/50", "pulse": "pulse-orange", "shadow": "hover:shadow-[0_0_30px_#FF6600_inset]", "line": "via-neon-orange" },
     "summary": "Using Python, Pandas, and XGBoost with EWMA lag features to predict employee absences for April 2026, assisting leadership in proactive workforce planning.",
-    "techStack": ["Python", "Pandas", "XGBoost", "EWMA"], "projectUrl": "https://github.com/ifathurrasyid/sickness_prediction_EWMA",
+    "techStack": ["Python", "Pandas", "XGBoost", "EWMA"], 
+    "projectUrl": "https://github.com/ifathurrasyid/sickness_prediction_EWMA",
     "details": [
-      { "subtitle": "The Architecture", "content": "Engineered a robust time-series pipeline using Pandas to build Exponentially Weighted Moving Average (EWMA) lag features, feeding into an optimized XGBoost regressor. The model captured complex seasonal sickness trends.", "image": "/sickness_prediction_ewma/sys_img_00.png", "gradient": "from-neon-orange/10 via-abyss to-abyss" },
-      { "subtitle": "Macro Prediction", "content": "The model successfully forecasted overall headcount absences across all 8 manufacturing departments with high accuracy on the out-of-time holdout data.", "image": "/sickness_prediction_ewma/sys_img_01.png", "gradient": "from-abyss via-neon-orange/5 to-abyss" },
-      { "subtitle": "Micro Prediction", "content": "Further granular analysis allowed the system to predict specific illness volumes (e.g., Dyspepsia, Typhoid) to assist the onsite medical clinic with inventory planning.", "image": "/sickness_prediction_ewma/sys_img_02.png", "gradient": "from-abyss via-abyss to-neon-orange/10", "link": "https://github.com/ifathurrasyid/sickness_prediction_EWMA" }
+      { "subtitle": "The Architecture", "content": "Engineered a robust time-series pipeline using Pandas to build Exponentially Weighted Moving Average (EWMA) lag features, feeding into an optimized XGBoost regressor. The model captured complex seasonal sickness trends.", "image": "/sickness_prediction_ewma/sys_img_00.png", "gradient": "from-cyan/10 via-abyss to-abyss" },
+      { "subtitle": "Macro Prediction", "content": "The model successfully forecasted overall headcount absences across all 8 manufacturing departments with high accuracy on the out-of-time holdout data.", "image": "/sickness_prediction_ewma/sys_img_01.png", "gradient": "from-abyss via-cyan/5 to-abyss" },
+      { "subtitle": "Micro Prediction", "content": "Further granular analysis allowed the system to predict specific illness volumes (e.g., Dyspepsia, Typhoid) to assist the onsite medical clinic with inventory planning.", "image": "/sickness_prediction_ewma/sys_img_02.png", "gradient": "from-abyss via-abyss to-cyan/10", "link": "https://github.com/ifathurrasyid/sickness_prediction_EWMA" }
     ]
   },
   {
-    "id": 6, "title": "Absence Dashboard for HoD", "category": "BI & Dashboards",
-    "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
-    "summary": "Designed a Metabase dashboard for HoD to track their employees' absence, ensuring timely decision-making.",
-    "techStack": ["SQL", "Metabase", "Data Viz"], "projectUrl": "#",
-    "details": [
-      { "subtitle": "The Context", "content": "Heads of Departments needed real-time visibility into their specific team's attendance metrics.", "gradient": "from-cyan/10 via-abyss to-abyss" },
-      { "subtitle": "The Architecture", "content": "Built role-based access control (RBAC) SQL views feeding into a localized Metabase reporting structure.", "gradient": "from-abyss via-cyan/5 to-abyss" },
-      { "subtitle": "The Outcome", "content": "Eliminated the daily HR attendance email blast, replacing it with a live self-service portal.", "gradient": "from-abyss via-abyss to-cyan/10" }
-    ]
-  },
-  {
-    "id": 7, "title": "This Website", "category": "Others",
-    "styles": { "text": "text-white", "border": "hover:border-white/50", "pulse": "pulse-white", "shadow": "hover:shadow-[0_0_30px_#FFFFFF_inset]", "line": "via-white" },
-    "summary": "Yes, I made this website using Next.js, Framer Motion, and Tailwind CSS to compile all my projects into one place.",
-    "techStack": ["Next.js", "Framer Motion", "Tailwind CSS"], "projectUrl": "https://github.com/ifathurrasyid/fathsporto",
-    "details": [
-      { "subtitle": "The Context", "content": "Standard CVs and portfolios lack the visceral, interactive depth necessary to truly showcase a technical skillset.", "gradient": "from-white/10 via-abyss to-abyss" },
-      { "subtitle": "The Architecture", "content": "Engineered a Next.js frontend with Tailwind CSS and Framer Motion for extreme Cyberpunk 2077 aesthetics.", "gradient": "from-abyss via-white/5 to-abyss" },
-      { "subtitle": "The Outcome", "content": "A high-performance, responsive digital terminal that serves as both a portfolio and a technical demonstration.", "gradient": "from-abyss via-abyss to-white/10" }
-    ]
-  },
-  {
-    "id": 8, "title": "Wishful Bazaar Performance Dashboard", "category": "BI & Dashboards",
+    "id": 3, 
+    "title": "Wishful Bazaar Dashboard", 
+    "category": "BI & Dashboards",
     "linkType": "tableau",
     "styles": { "text": "text-purple-400", "border": "hover:border-purple-500/50", "pulse": "pulse-purple", "shadow": "hover:shadow-[0_0_30px_#A855F7_inset]", "line": "via-purple-500" },
     "summary": "An interactive, executive-level Tableau dashboard tracking core retail KPIs, sales trends, and profitability metrics for the Wishful Bazaar dataset.",
-    "techStack": ["Tableau", "Data Viz", "Business Intelligence"], "projectUrl": "https://public.tableau.com/views/W9W10IntermediateAssignment_17341667593720/Dashboard",
+    "techStack": ["Tableau", "Data Viz", "Business Intelligence"], 
+    "projectUrl": "https://public.tableau.com/views/W9W10IntermediateAssignment_17341667593720/Dashboard",
     "image": "/wishful_bazaar/wishful_bazaar_dashboard.png",
     "details": [
       { 
@@ -119,6 +72,145 @@
         "gradient": "from-abyss via-abyss to-purple-500/10",
         "link": "https://docs.google.com/presentation/d/1evPI6fQBgl5v9D7R1Ea15J0KK0Z7sK7o5JvFyGFOVX0/edit?usp=sharing",
         "linkText": "View Analysis Deck"
+      }
+    ]
+  },
+  {
+    "id": 4, 
+    "title": "360-Degree Auto-Reporting Engine", 
+    "category": "Automation",
+    "styles": { "text": "text-neon-orange", "border": "hover:border-neon-orange/50", "pulse": "pulse-orange", "shadow": "hover:shadow-[0_0_30px_#FF6600_inset]", "line": "via-neon-orange" },
+    "summary": "An end-to-end Python pipeline utilizing python-pptx to dynamically generate customized, executive-ready PowerPoint slide decks from a master dataset.",
+    "techStack": ["Python", "python-pptx", "Pandas"], 
+    "projectUrl": "https://github.com/ifathurrasyid/360_review_automator",
+    "details": [
+      {
+        "subtitle": "1. The Transformation",
+        "content": "Manually generating individual executive review decks requires days of tedious formatting and chart manipulation. This pipeline automates the transformation of raw, messy spreadsheets into actionable insights instantly.",
+        "image": "/360_review/boring_to_something.png",
+        "gradient": "from-neon-orange/10 via-abyss to-abyss"
+      },
+      {
+        "subtitle": "2. The Executive Output",
+        "content": "Engineered a script to calculate complex benchmarking logic and dynamically inject ranked text, KPIs, and clustered charts into native PowerPoint objects. The result is a pixel-perfect, designer-quality slide.",
+        "image": "/360_review/output_example.png",
+        "gradient": "from-abyss via-neon-orange/5 to-abyss"
+      },
+      {
+        "subtitle": "3. The Automation Scale",
+        "content": "The engine scales effortlessly across the entire company roster. It programmatically generates customized charts, maintains layout integrity, and compiles all individual reports into a single, perfectly formatted Master Deck.",
+        "image": "/360_review/before_after.png",
+        "gradient": "from-abyss via-abyss to-neon-orange/10"
+      }
+    ]
+  },
+  {
+    "id": 5, 
+    "title": "PDS Extraction Engine", 
+    "category": "HR Analytics",
+    "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
+    "summary": "Automated ETL pipeline using xlwings and Pandas to extract, clean, and aggregate employee performance data from hundreds of unstructured Excel files.",
+    "techStack": ["Python", "xlwings", "Pandas"], 
+    "projectUrl": "#",
+    "details": [
+      {
+        "subtitle": "Unstructured Data Parsing",
+        "content": "Bypasses manual entry by programmatically scanning and extracting specific KPI metrics across hundreds of individual, variably-formatted performance review sheets.",
+        "gradient": "from-cyan/20 to-transparent"
+      }
+    ]
+  },
+  {
+    "id": 6, 
+    "title": "Dynamic QR Generator", 
+    "category": "Automation",
+    "styles": { "text": "text-neon-orange", "border": "hover:border-neon-orange/50", "pulse": "pulse-orange", "shadow": "hover:shadow-[0_0_30px_#FF6600_inset]", "line": "via-neon-orange" },
+    "summary": "Engineered a dynamic Python utility for bulk QR code generation, automating trackable links for HR surveys, event registrations, and internal campaigns.",
+    "techStack": ["Python", "Pillow (PIL)", "OS"], 
+    "projectUrl": "https://github.com/ifathurrasyid/qr_code_generator",
+    "details": [
+      { 
+        "subtitle": "The Context", 
+        "content": "The HR department needed hundreds of custom, trackable QR codes for employee surveys and event registrations, but manual graphic design generation was causing severe operational bottlenecks.", 
+        "image": "/qr_code_generator/batch_process.png",
+        "gradient": "from-neon-orange/10 via-abyss to-abyss" 
+      },
+      { 
+        "subtitle": "The Engine", 
+        "content": "Built a scalable Python script using the 'qrcode' and 'Pillow' libraries to automate bulk generation, leveraging multi-threading to process entire Excel databases in under a second.", 
+        "image": "/qr_code_generator/batch_run.png",
+        "gradient": "from-abyss via-neon-orange/5 to-abyss" 
+      },
+      { 
+        "subtitle": "High-Fidelity Outcome", 
+        "content": "The tool mathematically calculates aspect ratios for logo injection and processes alpha channels (transparency), instantly rendering pixel-perfect, branded assets ready for distribution.", 
+        "image": "/qr_code_generator/linkedin_profile.png",
+        "gradient": "from-abyss via-abyss to-neon-orange/10" 
+      }
+    ]
+  },
+  {
+    "id": 7, 
+    "title": "Portfolio_OS", 
+    "category": "Others",
+    "styles": { "text": "text-white", "border": "hover:border-white/50", "pulse": "pulse-white", "shadow": "hover:shadow-[0_0_30px_#FFFFFF_inset]", "line": "via-white" },
+    "summary": "A high-performance, cyberpunk-themed portfolio mainframe built to translate complex human resource data into tactical clarity.",
+    "techStack": ["Next.js", "Framer Motion", "Tailwind CSS"], 
+    "projectUrl": "https://github.com/ifathurrasyid/fathsporto",
+    "details": [
+      { 
+        "subtitle": "The Context", 
+        "content": "Standard CVs and portfolios lack the visceral, interactive depth necessary to truly showcase a technical skillset.", 
+        "image": "/portfolio_os/hero.png",
+        "gradient": "from-white/10 via-abyss to-abyss" 
+      },
+      { 
+        "subtitle": "The Architecture", 
+        "content": "Engineered a Next.js frontend with Tailwind CSS and Framer Motion for extreme Cyberpunk aesthetics, featuring custom React hooks for scroll transparency and mobile touch state bypassing.", 
+        "image": "/portfolio_os/work.png",
+        "gradient": "from-abyss via-white/5 to-abyss" 
+      },
+      { 
+        "subtitle": "The Outcome", 
+        "content": "A high-performance, responsive digital terminal that serves as both a portfolio and a technical demonstration.", 
+        "image": "/portfolio_os/mobile_responsive.png",
+        "gradient": "from-abyss via-abyss to-white/10" 
+      }
+    ]
+  },
+  {
+    "id": 8, 
+    "title": "IBM Attrition: Survival Analysis", 
+    "category": "HR Analytics",
+    "linkType": "deck",
+    "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
+    "summary": "Applied Kaplan-Meier estimators and Cox Proportional Hazards models to IBM's HR dataset to calculate precise time-to-event attrition risks.",
+    "techStack": ["Python", "Survival Analysis", "Looker Studio", "Pandas"], 
+    "projectUrl": "https://docs.google.com/presentation/d/1kAU2CKCQhH9MQP3ImBQgxeguAIZG2rpojnZJRWLIPGg/edit?usp=sharing",
+    "details": [
+      {
+        "subtitle": "1. Time-to-Event Modeling",
+        "content": "Standard classification predicts IF someone will leave. By utilizing the 'lifelines' library to build a Cox Proportional Hazards (CPH) model, I calculated exactly WHEN they are likely to leave and what variables accelerate that timeline.",
+        "image": "/ibm_survival/km_curve.png",
+        "gradient": "from-cyan/10 via-abyss to-abyss",
+        "link": "https://github.com/ifathurrasyid/ibm_survival_analysis",
+        "linkText": "View Python Engine"
+      },
+      {
+        "subtitle": "2. The 'Overtime' Hazard Ratio",
+        "content": "The mathematical modeling proved that Overtime is the absolute highest flight risk driver. The CPH model revealed a Hazard Ratio of 3.25, meaning employees working overtime are over 3 times more likely to quit than their peers.",
+        "image": "/ibm_survival/overtime_slide.png",
+        "gradient": "from-abyss via-cyan/5 to-abyss"
+      },
+      {
+        "subtitle": "3. Interactive & Code Hub",
+        "content": "Translated the complex statistical survival models into an interactive, self-service Looker Studio dashboard, while maintaining the rigorous mathematical engine in a dedicated Python repository.",
+        "image": "/ibm_survival/dashboard.png",
+        "gradient": "from-abyss via-abyss to-cyan/10",
+        "link": "https://lookerstudio.google.com/reporting/bfbb92d0-fd65-4cdf-b8b2-013ff1b53648",
+        "linkText": "View Dashboard",
+        "link2": "https://github.com/ifathurrasyid/ibm_survival_analysis",
+        "linkText2": "View Python Engine"
       }
     ]
   }

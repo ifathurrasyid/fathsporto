@@ -120,19 +120,30 @@ const ContactLink = ({ href, defaultText, hoverText }: any) => {
   );
 };
 
+// --- DEDICATED NAVBAR SCRAMBLE COMPONENT ---
+const NavScrambleLink = ({ href, defaultText, hoverText, colorClass, onClick }: any) => {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <Link href={href} onClick={onClick} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} className={`transition-colors block ${colorClass}`}>
+      <ScrambleText defaultText={defaultText} hoverText={hoverText} isHovering={isHovered} />
+    </Link>
+  );
+};
+
 const categories = ["All", "HR Analytics", "BI & Dashboards", "Automation", "Others"];
 
+// THE FIX: Removed GPU-heavy 'drop-shadow' from the filter string to fix scrolling lag.
 const extremeCrash: Variants = {
-  hidden: { opacity: 0, x: -30, filter: "brightness(2) hue-rotate(90deg) blur(10px) drop-shadow(-10px 0 red) drop-shadow(10px 0 blue)" },
+  hidden: { opacity: 0, x: -30, filter: "brightness(2) hue-rotate(90deg) blur(10px)" },
   visible: {
     opacity: [0, 1, 0.2, 1], x: [-30, 15, -5, 0],
     filter: [
-      "brightness(2) hue-rotate(90deg) blur(10px) drop-shadow(-10px 0 red) drop-shadow(10px 0 blue)",
-      "brightness(1.5) hue-rotate(-90deg) blur(4px) drop-shadow(5px 0 red) drop-shadow(-5px 0 cyan)",
+      "brightness(2) hue-rotate(90deg) blur(10px)",
+      "brightness(1.5) hue-rotate(-90deg) blur(4px)",
       "brightness(0.5) blur(2px)",
-      "brightness(1) hue-rotate(0deg) blur(0px) drop-shadow(0px 0 transparent)"
+      "brightness(1) hue-rotate(0deg) blur(0px)"
     ],
-    transition: { duration: 0.7, times: [0, 0.4, 0.7, 1], ease: "anticipate" }
+    transition: { duration: 0.5, times: [0, 0.4, 0.7, 1], ease: "anticipate" }
   }
 };
 
@@ -178,6 +189,7 @@ export default function Home() {
   const [portfolioHovered, setPortfolioHovered] = useState(false);
   const [spinClicks, setSpinClicks] = useState(0);
   const [logoHovered, setLogoHovered] = useState(false);
+  const [scrolled, setScrolled] = useState(false); 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // --- UNIVERSAL MODAL CONTROLLER ---
@@ -236,7 +248,10 @@ export default function Home() {
     const sections = document.querySelectorAll("section[id]");
     sections.forEach((section) => observer.observe(section));
 
-    const handleScroll = () => { setShowBackToTop(window.scrollY > 400); };
+    const handleScroll = () => { 
+      setShowBackToTop(window.scrollY > 400); 
+      setScrolled(window.scrollY > 50); 
+    };
     window.addEventListener("scroll", handleScroll);
 
     return () => {
@@ -248,79 +263,7 @@ export default function Home() {
   return (
     <div className="flex flex-col w-full selection:bg-neon-red/40 selection:text-white relative overflow-clip bg-[#01040A]" onTouchStart={() => {}}>
       <div className="grain-overlay z-0 pointer-events-none"></div>
-
-      {/* --- FLOATING NAVBAR --- */}
-      <nav className="fixed top-0 w-full z-[100] bg-[#01040A]/80 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          {/* LOGO & STAR */}
-          <div className="flex items-center gap-4">
-            <Link href="#hero" onClick={() => setSpinClicks(prev => prev + 1)} className="cursor-pointer outline-none block">
-              <div className="animate-[spin_10s_linear_infinite] flex items-center justify-center">
-                <motion.svg 
-                  animate={{ rotate: spinClicks * 360 }}
-                  transition={{ duration: 0.8, ease: "circOut" }}
-                  className="w-8 h-8 text-starlight hover:text-cyan active:text-cyan pulse-white" 
-                  viewBox="0 0 24 24" fill="currentColor"
-                >
-                  <path d="M12 0L15 9L24 12L15 15L12 24L9 15L0 12L9 9Z" />
-                </motion.svg>
-              </div>
-            </Link>
-            <Link 
-              href="#hero" 
-              onMouseEnter={() => setLogoHovered(true)} 
-              onMouseLeave={() => setLogoHovered(false)}
-              className="font-mono text-sm tracking-[0.2em] uppercase font-bold text-starlight hover:text-cyan active:text-cyan hover:drop-shadow-[0_0_8px_rgba(0,240,255,0.8)] active:drop-shadow-[0_0_8px_rgba(0,240,255,0.8)] transition-all translate-y-[2px]"
-            >
-              <ScrambleText defaultText="Fathuri" hoverText="FA7HU21" isHovering={logoHovered} />
-            </Link>
-          </div>
-          
-          {/* Quick Links (Desktop Only) */}
-          <div className="hidden md:flex gap-8 font-mono text-[10px] tracking-widest uppercase">
-             <Link href="#about" className="text-stardust hover:text-neon-red active:text-neon-red transition-colors">About</Link>
-             <Link href="#work" className="text-stardust hover:text-neon-orange active:text-neon-orange transition-colors">Work</Link>
-             <Link href="#career" className="text-stardust hover:text-cyan active:text-cyan transition-colors">Career</Link>
-             <Link href="#clearances" className="text-stardust hover:text-purple-400 active:text-purple-400 transition-colors">Clearances</Link>
-             <Link href="#contact" className="text-stardust hover:text-neon-yellow active:text-neon-yellow transition-colors">Contact</Link>
-          </div>
-
-          {/* Hamburger Button (Mobile Only) */}
-          <button 
-            className="md:hidden text-starlight hover:text-cyan active:text-cyan focus:outline-none p-2 transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Menu Dropdown */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div 
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-[#010308] border-b border-white/5 overflow-hidden"
-            >
-              <div className="flex flex-col px-6 py-4 gap-4 font-mono text-[10px] tracking-widest uppercase">
-                <Link href="#about" onClick={() => setMobileMenuOpen(false)} className="text-stardust hover:text-neon-red active:text-neon-red transition-colors py-2 border-b border-white/5">About</Link>
-                <Link href="#work" onClick={() => setMobileMenuOpen(false)} className="text-stardust hover:text-neon-orange active:text-neon-orange transition-colors py-2 border-b border-white/5">Work</Link>
-                <Link href="#career" onClick={() => setMobileMenuOpen(false)} className="text-stardust hover:text-cyan active:text-cyan transition-colors py-2 border-b border-white/5">Career</Link>
-                <Link href="#clearances" onClick={() => setMobileMenuOpen(false)} className="text-stardust hover:text-purple-400 active:text-purple-400 transition-colors py-2 border-b border-white/5">Clearances</Link>
-                <Link href="#contact" onClick={() => setMobileMenuOpen(false)} className="text-stardust hover:text-neon-yellow active:text-neon-yellow transition-colors py-2">Contact</Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-      
+    
       {/* SECTION 1: HERO -> Fades directly into Neon Red */}
       <section id="hero" className="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-20 w-full relative bg-gradient-to-b from-cyan/3 to-neon-red/3">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan/10 rounded-full blur-[120px] pointer-events-none animate-neon-breath z-0"></div>
@@ -352,7 +295,8 @@ export default function Home() {
       </section>
 
       {/* SECTION 2: ABOUT -> Starts Red, ends Orange */}
-      <section id="about" className="py-20 flex items-center justify-center scroll-mt-24 relative w-full bg-gradient-to-b from-neon-red/3 to-neon-orange/3">
+      {/* 5. CONSISTENT SPACING: Changed py-20 to py-24 */}
+      <section id="about" className="py-24 flex items-center justify-center scroll-mt-24 relative w-full bg-gradient-to-b from-neon-red/3 to-neon-orange/3">
         <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-neon-red/5 rounded-full blur-[100px] pointer-events-none animate-neon-breath z-0" style={{ animationDelay: '1s' }}></div>
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center w-full relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false, margin: "-50px" }} variants={extremeCrash}>
@@ -371,10 +315,9 @@ export default function Home() {
           <motion.div 
             initial="hidden" whileInView="visible" viewport={{ once: false, margin: "-50px" }} variants={extremeCrash} 
             onClick={handleReveal} 
-            // THE FIX: Only pause the 7-second timer if it's a physical mouse!
             onPointerEnter={(e) => { if (e.pointerType === 'mouse') setIsHoveringPortrait(true); }}
             onPointerLeave={() => setIsHoveringPortrait(false)}
-            className={`aspect-[3/4] bg-abyss/40 backdrop-blur-md border border-white/5 rounded-[2rem] flex items-center justify-center relative overflow-hidden group shadow-[inset_0_0_40px_rgba(255,0,60,0.05)] transition-all duration-700 ${(revealState === "encrypted" || revealState === "encrypting") ? "cursor-pointer hover:shadow-[0_0_40px_rgba(255,0,60,0.2)] active:border-neon-red/30 hover:border-neon-red/30" : ""} ${revealState === "revealed" ? "hover:scale-[1.02] active:scale-[1.02] hover:shadow-[0_0_40px_rgba(255,0,60,0.15)]" : ""}`}
+            className={`aspect-[3/4] bg-abyss/40 backdrop-blur-md border border-white/5 rounded-[2rem] flex items-center justify-center relative overflow-hidden group shadow-[inset_0_0_40px_rgba(255,0,60,0.05)] transition-all duration-700 ${(revealState === "encrypted" || revealState === "encrypting") ? "cursor-pointer hover:shadow-[0_0_40px_rgba(255,0,60,0.2)] hover:border-neon-red/30" : ""} ${revealState === "revealed" ? "hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(255,0,60,0.15)]" : ""}`}
           >
             {/* 1. BASE IMAGE LAYER (Stronger 150% scale, longer durations) */}
             <div className={`absolute inset-0 transition-all z-0 ${
@@ -383,8 +326,8 @@ export default function Home() {
               revealState === "smashing" ? "opacity-100 blur-0 scale-[1.50] duration-300 ease-out" : 
               "opacity-100 blur-0 scale-100 duration-500 ease-out"
             }`}>
-              <img src="/my_portrait/fath_portrait.png" alt="Fathurrasyid Ibrahim" className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${revealState === "revealed" ? "opacity-60 grayscale contrast-125 group-hover:opacity-100 group-active:opacity-100 group-hover:grayscale-0 group-active:grayscale-0 group-hover:contrast-100 group-active:contrast-100 transform scale-100 group-hover:scale-150 group-active:scale-150" : "opacity-100 grayscale contrast-125"}`} />
-              <div className={`absolute inset-0 bg-gradient-to-tr from-cyan/30 to-neon-red/30 mix-blend-overlay transition-opacity duration-700 pointer-events-none ${revealState === "revealed" ? "group-hover:opacity-0 group-active:opacity-0" : "opacity-100"}`}></div>
+              <img src="/my_portrait/fath_portrait.png" alt="Fathurrasyid Ibrahim" className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${revealState === "revealed" ? "opacity-60 grayscale contrast-125 group-hover:opacity-100 group-hover:grayscale-0 group-hover:contrast-100 transform scale-100 group-hover:scale-150" : "opacity-100 grayscale contrast-125"}`} />
+              <div className={`absolute inset-0 bg-gradient-to-tr from-cyan/30 to-neon-red/30 mix-blend-overlay transition-opacity duration-700 pointer-events-none ${revealState === "revealed" ? "group-hover:opacity-0" : "opacity-100"}`}></div>
             </div>
 
             {/* 2. THE MECHANICAL PIXEL SHUTTERS */}
@@ -410,17 +353,20 @@ export default function Home() {
               })}
             </div>
 
-            {/* 3. THE HEAVY LIGHT FLASH */}
+            {/* 3. THE HEAVY LIGHT FLASH (Matched to the new 300ms smash duration) */}
             <div className={`absolute inset-0 bg-white z-20 pointer-events-none transition-opacity ${revealState === 'smashing' ? 'opacity-100 duration-300' : 'opacity-0 duration-500'}`}></div>
 
-            {/* 4. RESTRICTED UI */}
+            {/* 4. RESTRICTED UI (Fades in over the closing tiles) */}
             <div className={`absolute inset-0 z-30 flex flex-col items-center justify-center transition-all ${
               revealState === "encrypted" ? "opacity-100 duration-700 delay-0 bg-abyss/80 backdrop-blur-sm" : 
               revealState === "encrypting" ? "opacity-100 duration-1000 delay-300 bg-transparent backdrop-blur-none" : 
               "opacity-0 duration-300 pointer-events-none bg-transparent backdrop-blur-none"
             }`}>
                <div className="absolute inset-0 grain-overlay opacity-30 pointer-events-none"></div>
-               <svg className="w-10 h-10 text-neon-red mb-4 animate-neon-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+               {/* 3. NEW CRISP LOCK ICON */}
+               <svg className="w-10 h-10 text-neon-red mb-4 animate-neon-pulse" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+               </svg>
                <span className="font-roboto text-xs text-neon-red tracking-[0.4em] uppercase animate-pull-glitch">[ RESTRICTED_ACCESS ]</span>
                <span className="font-mono text-[9px] text-stardust mt-6 tracking-widest uppercase pulse-white">Click to Decrypt</span>
             </div>
@@ -431,13 +377,14 @@ export default function Home() {
             </div>
 
             {/* 6. BORDER GLOW */}
-            <div className={`absolute inset-4 border border-neon-red/20 rounded-2xl z-50 pointer-events-none transition-all duration-700 animate-neon-breath ${revealState === "revealed" ? "group-hover:border-neon-red/80 group-active:border-neon-red/80 group-hover:shadow-[0_0_40px_rgba(255,0,60,0.5)_inset] group-active:shadow-[0_0_40px_rgba(255,0,60,0.5)_inset] group-hover:scale-95 group-active:scale-95" : ""}`} style={{ animationDelay: '2s' }}></div>
+            <div className={`absolute inset-4 border border-neon-red/20 rounded-2xl z-50 pointer-events-none transition-all duration-700 animate-neon-breath ${revealState === "revealed" ? "group-hover:border-neon-red/80 group-hover:shadow-[0_0_40px_rgba(255,0,60,0.5)_inset] group-hover:scale-95" : ""}`} style={{ animationDelay: '2s' }}></div>
           </motion.div>
         </div>
       </section>
 
       {/* SECTION 3: WORK -> Starts Orange, ends Cyan */}
-      <section id="work" className="py-20 scroll-mt-24 relative w-full bg-gradient-to-b from-neon-orange/3 to-cyan/3">
+      {/* 5. CONSISTENT SPACING: Changed py-20 to py-24 */}
+      <section id="work" className="py-24 scroll-mt-24 relative w-full bg-gradient-to-b from-neon-orange/3 to-cyan/3">
         <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-neon-orange/5 rounded-full blur-[120px] pointer-events-none animate-neon-breath z-0"></div>
         <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash} className="mb-12 max-w-5xl mx-auto">
@@ -487,7 +434,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 4: CAREER LOGS -> Starts Cyan, ends Purple */}
-      <section id="career" className="py-20 scroll-mt-24 relative w-full bg-gradient-to-b from-cyan/3 to-purple-500/3">
+      <section id="career" className="py-24 scroll-mt-24 relative w-full bg-gradient-to-b from-cyan/3 to-purple-500/3">
         <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-cyan/5 rounded-full blur-[100px] pointer-events-none animate-neon-breath z-0"></div>
         <div className="max-w-5xl mx-auto px-6 relative z-10">
           
@@ -506,10 +453,11 @@ export default function Home() {
               {careerLogs.map((log, index) => (
                 <motion.div 
                   key={log.id} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }} transition={{ delay: index * 0.2, duration: 0.5 }}
+                  viewport={{ once: false, margin: "-50px" }} transition={{ delay: index * 0.2, duration: 0.5 }}
                   onClick={() => setSelectedCareer(log)} className="group relative pl-12 md:pl-24 py-4 cursor-pointer"
                 >
-                  <div className={`absolute left-[11px] md:left-[27px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-abyss border-2 ${log.styles.border} group-hover:scale-[2] group-active:scale-[2] group-hover:bg-white group-active:bg-white transition-all duration-300 z-10`}></div>
+                  {/* THE FIX: Mathematically centered the 8px dot exactly onto the 1px line (left-12 & left-28) */}
+                  <div className={`absolute left-[12.5px] md:left-[28.5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-abyss border-2 ${log.styles.border} group-hover:scale-[2] group-active:scale-[2] group-hover:bg-white group-active:bg-white transition-all duration-300 z-10`}></div>
                   
                   <div className={`bg-abyss/40 backdrop-blur-sm border border-white/5 ${log.styles.border} ${log.styles.glow} p-6 md:p-8 rounded-2xl hover:bg-white/5 active:bg-white/5 transition-all duration-300 transform group-hover:translate-x-2 group-active:translate-x-2 group-hover:-translate-y-1 group-active:-translate-y-1`}>
                     <p className={`font-roboto text-[10px] tracking-widest uppercase mb-2 ${log.styles.text}`}>{log.period}</p>
@@ -529,7 +477,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 5: CLEARANCES -> Starts Purple, ends Neon Yellow */}
-      <section id="clearances" className="py-20 scroll-mt-24 relative w-full bg-gradient-to-b from-purple-500/3 to-neon-yellow/3">
+      <section id="clearances" className="py-24 scroll-mt-24 relative w-full bg-gradient-to-b from-purple-500/3 to-neon-yellow/3">
         <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none animate-neon-breath z-0"></div>
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           
@@ -545,7 +493,7 @@ export default function Home() {
             {certsLogs.map((cert, index) => (
               <motion.div 
                 key={cert.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }} transition={{ delay: index * 0.2, duration: 0.5 }}
+                viewport={{ once: false, margin: "-50px" }} transition={{ delay: index * 0.2, duration: 0.5 }}
                 className={`relative bg-abyss/40 backdrop-blur-md border border-white/5 ${cert.styles.border} ${cert.styles.glow} p-8 rounded-2xl overflow-hidden group transition-all duration-300 hover:scale-[1.02] active:scale-[1.02] flex flex-col`}
               >
                 <div className="w-3/4 h-5 bg-[repeating-linear-gradient(90deg,transparent,transparent_2px,rgba(255,255,255,0.1)_2px,rgba(255,255,255,0.1)_5px,transparent_5px,transparent_8px,rgba(255,255,255,0.3)_8px,rgba(255,255,255,0.3)_10px)] mb-6 opacity-40 group-hover:opacity-100 group-active:opacity-100 transition-opacity"></div>
@@ -574,7 +522,8 @@ export default function Home() {
       </section>
 
       {/* SECTION 6: CONTACT -> Stays Yellow to the bottom */}
-      <section id="contact" className="pt-20 pb-4 scroll-mt-24 relative w-full bg-gradient-to-b from-neon-yellow/3 to-neon-yellow/3">
+      {/* 5. CONSISTENT SPACING: Changed pt-20 pb-4 to py-24 */}
+      <section id="contact" className="py-24 scroll-mt-24 relative w-full bg-gradient-to-b from-neon-yellow/3 to-neon-yellow/3">
         <div className="absolute bottom-[-100px] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-neon-yellow/3 rounded-full blur-[120px] pointer-events-none animate-neon-breath z-0" style={{ animationDelay: '1.5s' }}></div>
         <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center w-full relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash}>
@@ -593,7 +542,8 @@ export default function Home() {
         </div>
         
         {/* Tightened Footer Spacing */}
-        <div className="max-w-5xl mx-auto px-6 mt-16 pt-8 pb-2 flex flex-col md:flex-row justify-between items-center font-roboto text-[9px] tracking-widest text-stardust uppercase relative z-10 border-t border-white/5">
+        {/* 4. REMOVED FOOTER LINE: Deleted 'border-t border-white/5' */}
+        <div className="max-w-5xl mx-auto px-6 mt-16 pt-8 pb-2 flex flex-col md:flex-row justify-between items-center font-roboto text-[9px] tracking-widest text-stardust uppercase relative z-10">
           <p>© 2026 Fathurrasyid Ibrahim.</p>
           <p className="text-neon-yellow/60 pulse-yellow">System Online</p>
         </div>
@@ -638,7 +588,7 @@ export default function Home() {
                      sys.log.query({selectedCareer.company.replace(/\s+/g, '_')})
                    </span>
                 </div>
-                <button onClick={() => window.history.back()} className="text-stardust hover:text-white active:text-white transition-colors pulse-white font-mono uppercase text-xs tracking-widest p-2 -mt-2 -mr-2 shrink-0">
+                <button onClick={() => window.history.back()} className="text-stardust hover:text-neon-red active:text-neon-red transition-colors pulse-red font-mono uppercase text-xs tracking-widest p-2 -mt-2 -mr-2 shrink-0">
                   [ X ]
                 </button>
               </div>
@@ -696,16 +646,23 @@ export default function Home() {
                       className={`group relative text-[10px] font-roboto font-bold tracking-widest uppercase border border-white/10 px-4 md:px-6 py-2 rounded-full hover:bg-white/5 active:bg-white/5 transition-colors ${selectedProject.styles.text} flex items-center justify-center min-w-[140px] md:min-w-[220px]`}
                     >
                       <span className="absolute left-4 md:left-6 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 hidden md:block">
+                        {/* ICON RENDERER LOGIC */}
                         {selectedProject.linkType === 'tableau' || selectedProject.linkType === 'looker' || selectedProject.linkType === 'metabase' ? (
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v16H4V4zm8 5h8v11h-8V9zm0-5h8v3h-8V4z" /></svg>
+                        ) : selectedProject.linkType === 'deck' ? (
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1zm-3.5-9h-5c-.28 0-.5.22-.5.5v3c0 .28.22.5.5.5h5c.28 0 .5-.22.5-.5v-3c0-.28-.22-.5-.5-.5z"/></svg>
                         ) : (
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
                         )}
                       </span>
                       <span className="transform md:group-hover:translate-x-3 md:group-active:translate-x-3 transition-transform duration-300">
+                        {/* TEXT RENDERER LOGIC */}
                         <ScrambleText 
                           defaultText="[ Execute_Link ]" 
-                          hoverText={selectedProject.linkType === 'tableau' || selectedProject.linkType === 'looker' || selectedProject.linkType === 'metabase' ? "[ ACCESS_DASHBOARD ]" : "[ ACCESS_REPO ]"} 
+                          hoverText={
+                            selectedProject.linkType === 'tableau' || selectedProject.linkType === 'looker' || selectedProject.linkType === 'metabase' ? "[ ACCESS_DASHBOARD ]" : 
+                            selectedProject.linkType === 'deck' ? "[ ACCESS_DECK ]" : "[ ACCESS_REPO ]"
+                          } 
                           isHovering={repoHovered} 
                         />
                       </span>

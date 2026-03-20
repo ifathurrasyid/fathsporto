@@ -1,75 +1,45 @@
-# [ FATHURRASYID IBRAHIM // DATA_ANALYST_v2.0 ]
+# 🌐 Portfolio_OS // Cyberpunk Analytics Terminal
 
-> **USER_ID:** Fath  
-> **ROLE:** Data Analyst @ PT. TKG Taekwang Indonesia  
-> **LOCATION:** Subang, ID  
-> **AESTHETIC:** Cyberpunk_2077 // Tactical Clarity  
+![Mainframe Interface](public/portfolio_os/mainframe_hero.png)
 
----
+## 🚀 Overview
+Standard resumes and traditional portfolios lack the visceral, interactive depth necessary to truly showcase a technical skillset. **Portfolio_OS** is a high-performance, cyberpunk-themed digital terminal designed to translate complex HR analytics and automation engineering into tactical, visual clarity.
 
-## ⚡ EXECUTIVE SUMMARY
-I translate the complexity of business operations and human behavior into actionable clarity. With a professional background rooted in **Human Resources** and **AI Training**, I bridge the gap between raw data and strategic decision-making. 
-
-This portfolio mainframe is a bespoke React-based environment designed to showcase high-end UI/UX integration, predictive analytics projects, and my operational history.
+Built with **Next.js, Tailwind CSS, and Framer Motion**, this project serves as both a central hub for my data engineering projects and a live technical demonstration of modern frontend architecture.
 
 ---
 
-## 🛰️ CORE COMPETENCIES [SYSTEM_SKILLS]
-
-### // DATA ARCHITECTURE
-- **Languages:** Python (Pandas, NumPy, Scikit-learn), TypeScript, SQL.
-- **BI & Visualization:** Metabase, Tableau, Looker Studio.
-- **Analysis:** Workforce analytics, turnover prediction (XGBoost/EWMA), automation pipelines.
-
-### // INTERFACE & UX
-- **Frameworks:** Next.js 15 (App Router), React.
-- **Styling:** Tailwind CSS (Custom Neon Architecture).
-- **Motion:** Framer Motion (Complex physics and sequential animations).
-
-### // AI & INSTRUCTION
-- **Tutor Role:** Remote AI Tutor for Mindrift.ai, specializing in refining large language model logic and response accuracy.
+## ✨ System Features
+* **Extreme Cyberpunk Aesthetic:** Dark mode native, featuring neon glows, custom pulse animations, and deep abyss gradients to keep users visually engaged.
+* **Tactile Interactivity:** Heavily utilizes Framer Motion and Tailwind hover states to create a responsive, software-like feel rather than a static webpage.
+* **Dynamic Data Rendering:** Project architectures, tech stacks, and detailed image carousels are rendered dynamically from a central JSON architecture, allowing for instant scalability as new projects are added.
+* **Mobile-First Responsiveness:** Features custom React hooks to handle touch states, scroll transparency, and perfect flexbox scaling across any device size.
 
 ---
 
-## 🛠️ THE HARDWARE [TECH_STACK]
-- **Core:** [Next.js 15](https://nextjs.org/)
-- **Logic:** TypeScript
-- **Visuals:** Framer Motion + Tailwind CSS
-- **Deployment:** Vercel Global Edge Network
+## 📸 Interface Showcase
+
+### 1. The Interactive UI
+Tactile hover states and dynamic gradients guide the user's eye directly to the project architecture.
+![Project Cards](public/portfolio_os/interactive_ui.png)
+
+### 2. Mobile Terminal
+Flawless vertical scaling ensures the terminal is fully operational and visually striking on any mobile device.
+![Mobile View](public/portfolio_os/mobile_responsive.png)
 
 ---
 
-## 🔒 SYSTEM FEATURES [MOD_LOGS]
-
-- **Secure Portrait Engine:** A custom-built animation engine featuring mechanical pixel shutters and 7-second auto-relock protocols to simulate secure terminal access.
-- **Deep-Query Modals:** Terminal-style pop-ups utilizing browser history manipulation (popstate) to ensure seamless "swipe back" navigation on mobile devices.
-- **Matrix Scrambler:** A high-performance text scrambling component that decrypts strings in real-time based on diagonal pixel-grid delays.
-- **Responsive Tactics:** 100% mobile-optimized with specific `pointerType` listeners to bypass "sticky hover" limitations on touch devices.
+## 🛠️ Tech Stack
+* **Framework:** Next.js (React)
+* **Styling:** Tailwind CSS (Custom neon configurations, complex gradients)
+* **Animation:** Framer Motion (Page transitions, dynamic mounting)
+* **Deployment:** Vercel 
 
 ---
 
-## 🚀 INITIALIZING MAIN FRAME
-To deploy a local instance of this terminal:
-
-```bash
-# Clone the repository
-git clone [https://github.com/ifathurrasyid/fathsporto.git](https://github.com/ifathurrasyid/fathsporto.git)
-
-# Enter the directory
-cd fathsporto
-
-# Install dependencies
-npm install
-
-# Run the development server
-npm run dev
-📡 SIGNAL TRANSMISSION [CONTACT]
-EMAIL: ifathurra@gmail.com
-
-LINKEDIN: in/ifathurrasyid
-
-GITHUB: ifathurrasyid
-
-PORTFOLIO: ifathurrasyid.com
-
-© 2026 FATHURRASYID IBRAHIM. All data points verified. System online.
+## ⚙️ Initialization
+To boot the terminal locally:
+1. Clone this repository.
+2. Install dependencies: `npm install`
+3. Start the development server: `npm run dev`
+4. Access the mainframe at `http://localhost:3000`
