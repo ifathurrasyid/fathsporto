@@ -213,52 +213,75 @@ export default function Home() {
     }
   }, [selectedProject, selectedCareer]);
 
-  // THE 5-STAGE REVEAL SEQUENCE
+  // THE 5-STAGE REVEAL SEQUENCE (And Manual Relock)
   const handleReveal = () => {
     if (revealState === "encrypted") {
+      // FORWARD SEQUENCE: Decrypt -> Flash -> Revealed
       setRevealState("decrypting");
       setTimeout(() => { setRevealState("smashing"); }, 1200); 
       setTimeout(() => { setRevealState("revealed"); }, 1500); 
+      
+    } else if (revealState === "revealed") {
+      // REVERSE SEQUENCE: Flash -> Encrypt -> Locked
+      setRevealState("reverse_smashing"); 
+      setTimeout(() => { setRevealState("encrypting"); }, 300); 
+      setTimeout(() => { setRevealState("encrypted"); }, 1500); 
     }
   };
 
   // THE REVERSE "SHUTTER" SEQUENCE (Auto-Relock)
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    let timeouts: NodeJS.Timeout[] = [];
+
     if (revealState === "revealed" && !isHoveringPortrait) {
-      timeoutId = setTimeout(() => {
-        setRevealState("encrypting"); 
-        setTimeout(() => { setRevealState("encrypted"); }, 1200); 
-      }, 7000);
+      const t1 = setTimeout(() => {
+        // 1. Trigger the heavy light flash first
+        setRevealState("reverse_smashing"); 
+        
+        // 2. After 300ms flash, start the pixel shutters
+        const t2 = setTimeout(() => { 
+          setRevealState("encrypting"); 
+        }, 300);
+        timeouts.push(t2);
+
+        // 3. After 1200ms of shutters (1500ms total), lock it down
+        const t3 = setTimeout(() => { 
+          setRevealState("encrypted"); 
+        }, 1500);
+        timeouts.push(t3);
+
+      }, 7000); // 7-second idle timer
+      timeouts.push(t1);
     }
-    return () => clearTimeout(timeoutId);
+
+    // Cleanup function to kill all timers if the user hovers or clicks
+    return () => {
+      timeouts.forEach(clearTimeout);
+    };
   }, [revealState, isHoveringPortrait]);
 
   const scrollToTop = () => { window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
+  // THE REVERSE "SHUTTER" SEQUENCE (Auto-Relock)
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) { window.history.replaceState(null, "", `#${entry.target.id}`); }
-        });
-      },
-      { rootMargin: "-50% 0px -50% 0px" } 
-    );
-    const sections = document.querySelectorAll("section[id]");
-    sections.forEach((section) => observer.observe(section));
-
-    const handleScroll = () => { 
-      setShowBackToTop(window.scrollY > 400); 
-      setScrolled(window.scrollY > 50); 
-    };
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    let idleTimer: NodeJS.Timeout;
+    
+    // Only run the 7-second countdown if fully revealed and not hovering
+    if (revealState === "revealed" && !isHoveringPortrait) {
+      idleTimer = setTimeout(() => {
+        
+        // Fire the sequence safely outside of the cleanup array
+        setRevealState("reverse_smashing"); 
+        setTimeout(() => setRevealState("encrypting"), 300); 
+        setTimeout(() => setRevealState("encrypted"), 1500); 
+        
+      }, 7000);
+    }
+    
+    // This now ONLY kills the 7-second countdown if you interrupt it, 
+    // it won't accidentally kill the animation while it's running!
+    return () => clearTimeout(idleTimer);
+  }, [revealState, isHoveringPortrait]);
 
   return (
     <div className="flex flex-col w-full selection:bg-neon-red/40 selection:text-white relative overflow-clip bg-[#01040A]" onTouchStart={() => {}}>
@@ -279,7 +302,7 @@ export default function Home() {
             <h1 className="text-5xl md:text-[5.5rem] leading-none font-roboto font-bold tracking-tighter text-starlight uppercase animate-pull-glitch">FATHURRASYID IBRAHIM</h1>
           </motion.span>
           <motion.div variants={powerUp} className="relative mt-6">
-            <p className="text-lg md:text-xl text-stardust leading-relaxed font-light max-w-2xl mx-auto block">I translate the complexity of business and people into clarity—through data, through analysis, and through the quiet art of asking the right questions.</p>
+            <p className="text-lg md:text-xl text-stardust leading-relaxed font-light max-w-2xl mx-auto block">I translate the complexity of real-world challenges into clarity—through data, through analysis, and through the quiet art of asking the right questions.</p>
           </motion.div>
           <motion.div variants={powerUp} className="pt-10">
             <Link 
@@ -306,8 +329,9 @@ export default function Home() {
               <span className="inline-block pulse-red"><span className="text-neon-red font-bold animate-pull-glitch block">behind the data</span></span>
             </h2>
             <div className="space-y-6 text-stardust font-light leading-relaxed">
-              <p>I am a <strong className="font-medium text-starlight pulse-white">Data Analyst</strong> with a foundation in Human Resources. I believe that behind every raw data point is a process, a friction point, or a story worth understanding.</p>
-              <p>My work lives at the intersection of complex analytics and actual human strategy. Whether I am building automated Python pipelines or simplifying workforce metrics into Metabase dashboards, my goal is always to turn complexity into decisions that make sense.</p>
+              {/* Updated Bio to the new version! */}
+              <p>I am a <strong className="font-medium text-starlight pulse-white">Data Analyst</strong> with a deep foundation in Human Resources, though my expertise extends to solving complex challenges across any data-driven domain. I believe that behind every raw data point is a process, a friction point, or a story worth understanding.</p>
+              <p>My work lives at the intersection of complex analytics and actual human strategy. Whether I am querying databases with <strong className="font-medium text-starlight">SQL</strong>, applying <strong className="font-medium text-starlight">statistical rigor</strong> to identify patterns, or building automated <strong className="font-medium text-starlight">Python pipelines</strong> and <strong className="font-medium text-starlight">Excel models</strong> to simplify metrics into intuitive dashboards, my goal is always to turn complexity into decisions that make sense.</p>
               <p className="italic font-inter text-starlight/60">Based in Subang. Translating data worldwide.</p>
             </div>
           </motion.div>
@@ -319,11 +343,11 @@ export default function Home() {
             onPointerLeave={() => setIsHoveringPortrait(false)}
             className={`aspect-[3/4] bg-abyss/40 backdrop-blur-md border border-white/5 rounded-[2rem] flex items-center justify-center relative overflow-hidden group shadow-[inset_0_0_40px_rgba(255,0,60,0.05)] transition-all duration-700 ${(revealState === "encrypted" || revealState === "encrypting") ? "cursor-pointer hover:shadow-[0_0_40px_rgba(255,0,60,0.2)] hover:border-neon-red/30" : ""} ${revealState === "revealed" ? "hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(255,0,60,0.15)]" : ""}`}
           >
-            {/* 1. BASE IMAGE LAYER (Stronger 150% scale, longer durations) */}
+            {/* 1. BASE IMAGE LAYER (Updated to handle reverse_smashing) */}
             <div className={`absolute inset-0 transition-all z-0 ${
               (revealState === "encrypted" || revealState === "encrypting") ? "opacity-0 blur-xl scale-110 duration-700" : 
               revealState === "decrypting" ? "opacity-100 blur-md scale-[1.05] duration-[1200ms] ease-linear" : 
-              revealState === "smashing" ? "opacity-100 blur-0 scale-[1.50] duration-300 ease-out" : 
+              (revealState === "smashing" || revealState === "reverse_smashing") ? "opacity-100 blur-0 scale-[1.50] duration-300 ease-out" : 
               "opacity-100 blur-0 scale-100 duration-500 ease-out"
             }`}>
               <img src="/my_portrait/fath_portrait.png" alt="Fathurrasyid Ibrahim" className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${revealState === "revealed" ? "opacity-60 grayscale contrast-125 group-hover:opacity-100 group-hover:grayscale-0 group-hover:contrast-100 transform scale-100 group-hover:scale-150" : "opacity-100 grayscale contrast-125"}`} />
@@ -343,6 +367,7 @@ export default function Home() {
                       rotateY: isClosed ? 0 : 90 
                     }}
                     transition={{ 
+                      // Uses reverseDelay for encrypting (bottom-right to top-left)
                       delay: revealState === "encrypting" ? pixel.reverseDelay : (revealState === "decrypting" ? pixel.forwardDelay : 0), 
                       duration: 0.15,
                       ease: "easeInOut"
@@ -353,17 +378,16 @@ export default function Home() {
               })}
             </div>
 
-            {/* 3. THE HEAVY LIGHT FLASH (Matched to the new 300ms smash duration) */}
-            <div className={`absolute inset-0 bg-white z-20 pointer-events-none transition-opacity ${revealState === 'smashing' ? 'opacity-100 duration-300' : 'opacity-0 duration-500'}`}></div>
+            {/* 3. THE HEAVY LIGHT FLASH (Now triggers on reverse_smashing too) */}
+            <div className={`absolute inset-0 bg-white z-20 pointer-events-none transition-opacity ${revealState === 'smashing' || revealState === 'reverse_smashing' ? 'opacity-100 duration-300' : 'opacity-0 duration-500'}`}></div>
 
-            {/* 4. RESTRICTED UI (Fades in over the closing tiles) */}
+            {/* 4. RESTRICTED UI */}
             <div className={`absolute inset-0 z-30 flex flex-col items-center justify-center transition-all ${
               revealState === "encrypted" ? "opacity-100 duration-700 delay-0 bg-abyss/80 backdrop-blur-sm" : 
               revealState === "encrypting" ? "opacity-100 duration-1000 delay-300 bg-transparent backdrop-blur-none" : 
               "opacity-0 duration-300 pointer-events-none bg-transparent backdrop-blur-none"
             }`}>
                <div className="absolute inset-0 grain-overlay opacity-30 pointer-events-none"></div>
-               {/* 3. NEW CRISP LOCK ICON */}
                <svg className="w-10 h-10 text-neon-red mb-4 animate-neon-pulse" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                </svg>
@@ -371,9 +395,14 @@ export default function Home() {
                <span className="font-mono text-[9px] text-stardust mt-6 tracking-widest uppercase pulse-white">Click to Decrypt</span>
             </div>
 
-            {/* 5. DECRYPTING TEXT */}
+            {/* 5. DECRYPTING / ENCRYPTING TEXT */}
             <div className={`absolute inset-0 z-40 flex items-center justify-center bg-neon-red/10 mix-blend-overlay transition-opacity duration-75 ${revealState === "decrypting" ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
               <span className="font-mono text-2xl text-starlight tracking-widest font-bold animate-micro-glitch">DECRYPTING...</span>
+            </div>
+            
+            {/* Added: ENCRYPTING TEXT overlay */}
+            <div className={`absolute inset-0 z-40 flex items-center justify-center bg-neon-red/10 mix-blend-overlay transition-opacity duration-75 ${revealState === "encrypting" ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+              <span className="font-mono text-2xl text-starlight tracking-widest font-bold animate-micro-glitch">ENCRYPTING...</span>
             </div>
 
             {/* 6. BORDER GLOW */}
@@ -477,15 +506,15 @@ export default function Home() {
       </section>
 
       {/* SECTION 5: CLEARANCES -> Starts Purple, ends Neon Yellow */}
-      <section id="clearances" className="py-24 scroll-mt-24 relative w-full bg-gradient-to-b from-purple-500/3 to-neon-yellow/3">
+      <section id="credentials" className="py-24 scroll-mt-24 relative w-full bg-gradient-to-b from-purple-500/3 to-neon-yellow/3">
         <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none animate-neon-breath z-0"></div>
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash} className="mb-12">
-            <p className="font-roboto text-[10px] tracking-[0.4em] uppercase text-purple-400 mb-4 pulse-purple">04_Clearances</p>
+            <p className="font-roboto text-[10px] tracking-[0.4em] uppercase text-purple-400 mb-4 pulse-purple">04_Credentials</p>
             <h2 className="text-4xl md:text-5xl font-inter font-light tracking-tight mb-4 text-starlight">
-              <span>Security </span> 
-              <span className="inline-block pulse-purple"><span className="font-bold text-purple-400 animate-pull-glitch block">Credentials</span></span>
+              <span>Acquired </span> 
+              <span className="inline-block pulse-purple"><span className="font-bold text-purple-400 animate-pull-glitch block">Protocols</span></span>
             </h2>
           </motion.div>
 

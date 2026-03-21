@@ -71,7 +71,7 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
       
-      const sections = ["hero", "about", "work", "career", "clearances", "contact"];
+      const sections = ["hero", "about", "work", "career", "credentials", "contact"];
       let current = "";
       
       for (const section of sections) {
@@ -96,7 +96,7 @@ export default function Navbar() {
     { id: "about", name: "About", glitch: "AB0U7", href: "#about", activeColor: "text-neon-red", colorClass: "hover:text-neon-red active:text-neon-red", lineClass: "bg-neon-red" },
     { id: "work", name: "Work", glitch: "W0RK", href: "#work", activeColor: "text-neon-orange", colorClass: "hover:text-neon-orange active:text-neon-orange", lineClass: "bg-neon-orange" },
     { id: "career", name: "Career", glitch: "C4R33R", href: "#career", activeColor: "text-cyan", colorClass: "hover:text-cyan active:text-cyan", lineClass: "bg-cyan" },
-    { id: "clearances", name: "Clearances", glitch: "CL34R4NC35", href: "#clearances", activeColor: "text-purple-400", colorClass: "hover:text-purple-400 active:text-purple-400", lineClass: "bg-purple-400" },
+    { id: "credentials", name: "Credentials", glitch: "CR3D3NT14LS", href: "#credentials", activeColor: "text-purple-400", colorClass: "hover:text-purple-400 active:text-purple-400", lineClass: "bg-purple-400" },
     { id: "contact", name: "Contact", glitch: "C0N74C7", href: "#contact", activeColor: "text-neon-yellow", colorClass: "hover:text-neon-yellow active:text-neon-yellow", lineClass: "bg-neon-yellow" },
   ];
 
