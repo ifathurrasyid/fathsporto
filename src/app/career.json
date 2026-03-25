@@ -37,5 +37,18 @@
       "Automated Annual Assessments and Personality Profiling via advanced Excel tools, reducing evaluation time by 76.9%.",
       "Enforced 100% data integrity across Attendance and Demographics through rigorous data cleaning protocols."
     ]
+  },
+  {
+    "id": "tkg-dev",
+    "title": "Development Staff",
+    "company": "PT. TKG Taekwang Indonesia",
+    "period": "Jan 2022 - Apr 2023",
+    "styles": { "glow": "hover:shadow-[0_0_30px_#FF5E00_inset]", "border": "border-neon-orange/30 hover:border-neon-orange", "text": "text-neon-orange" },
+    "modalContent": [
+      "Optimized component design to mitigate up to 70% of production errors through proactive design validation and technical troubleshooting.",
+      "Engineered precision jigs and measurement gauges to standardize assembly accuracy and streamline production workflows.",
+      "Managed centralized operational data for inventory control and resource distribution to ensure seamless production cycles.",
+      "Developed data-driven systems for department tool management and warehouse logistics to optimize resource availability."
+    ]
   }
 ]

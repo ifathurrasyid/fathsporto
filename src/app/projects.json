@@ -106,17 +106,31 @@
   },
   {
     "id": 5, 
-    "title": "PDS Extraction Engine", 
-    "category": "HR Analytics",
-    "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
-    "summary": "Automated ETL pipeline using xlwings and Pandas to extract, clean, and aggregate employee performance data from hundreds of unstructured Excel files.",
-    "techStack": ["Python", "xlwings", "Pandas"], 
-    "projectUrl": "#",
+    "title": "Supermarket Transaction Analysis", 
+    "category": "Statistical Analytics",
+    "linkType": "excel",
+    "styles": { "text": "text-emerald-400", "border": "hover:border-emerald-500/50", "pulse": "pulse-emerald", "shadow": "hover:shadow-[0_0_30px_#10B981_inset]", "line": "via-emerald-500" },
+    "summary": "Investigated the true drivers of supermarket transaction values using T-Tests and Multiple Linear Regression, uncovering how omitted variable bias skewed initial membership performance metrics.",
+    "techStack": ["Excel", "Statistical Modeling", "Multiple Linear Regression", "T-Test"], 
+    "projectUrl": "/supermarket_sales/Supermarket_Transaction_Analysis.xlsx",
     "details": [
       {
-        "subtitle": "Unstructured Data Parsing",
-        "content": "Bypasses manual entry by programmatically scanning and extracting specific KPI metrics across hundreds of individual, variably-formatted performance review sheets.",
-        "gradient": "from-cyan/20 to-transparent"
+        "subtitle": "1. Data Cleansing & Validation",
+        "content": "I resolved a regional formatting conflict that misidentified decimal points as thousand-separators, which had artificially inflated transaction values. By programmatically recalculating the entire financial funnel—from Unit Price to Sales—I restored data scale and ensured 100% integrity before testing.",
+        "image": "/supermarket_sales/data_cleaning.png",
+        "gradient": "from-emerald-500/10 via-abyss to-abyss"
+      },
+      {
+        "subtitle": "2. The Borderline Mystery",
+        "content": "A Two-Sample T-Test showed Members spending an average of $335 vs. $306 for Normal customers. However, the p-value of 0.059 sits just outside the strict 95% significance threshold. This indicated a strong directional trend that required deeper multivariate validation to confirm the true driver.",
+        "image": "/supermarket_sales/t-test.png",
+        "gradient": "from-abyss via-emerald-500/5 to-abyss"
+      },
+      {
+        "subtitle": "3. The Regression Reveal",
+        "content": "Multiple Linear Regression exposed an 'omitted variable bias.' When controlling for price and gender, Membership became statistically insignificant (p=0.428). Gender emerged as the primary driver (p=0.0013), with female customers independently contributing an additional $39 per transaction.",
+        "image": "/supermarket_sales/regression.png",
+        "gradient": "from-abyss via-abyss to-emerald-500/10"
       }
     ]
   },
@@ -151,35 +165,6 @@
   },
   {
     "id": 7, 
-    "title": "Portfolio_OS", 
-    "category": "Others",
-    "styles": { "text": "text-white", "border": "hover:border-white/50", "pulse": "pulse-white", "shadow": "hover:shadow-[0_0_30px_#FFFFFF_inset]", "line": "via-white" },
-    "summary": "A high-performance, cyberpunk-themed portfolio mainframe built to translate complex human resource data into tactical clarity.",
-    "techStack": ["Next.js", "Framer Motion", "Tailwind CSS"], 
-    "projectUrl": "https://github.com/ifathurrasyid/fathsporto",
-    "details": [
-      { 
-        "subtitle": "The Context", 
-        "content": "Standard CVs and portfolios lack the visceral, interactive depth necessary to truly showcase a technical skillset.", 
-        "image": "/portfolio_os/hero.png",
-        "gradient": "from-white/10 via-abyss to-abyss" 
-      },
-      { 
-        "subtitle": "The Architecture", 
-        "content": "Engineered a Next.js frontend with Tailwind CSS and Framer Motion for extreme Cyberpunk aesthetics, featuring custom React hooks for scroll transparency and mobile touch state bypassing.", 
-        "image": "/portfolio_os/work.png",
-        "gradient": "from-abyss via-white/5 to-abyss" 
-      },
-      { 
-        "subtitle": "The Outcome", 
-        "content": "A high-performance, responsive digital terminal that serves as both a portfolio and a technical demonstration.", 
-        "image": "/portfolio_os/mobile_responsive.png",
-        "gradient": "from-abyss via-abyss to-white/10" 
-      }
-    ]
-  },
-  {
-    "id": 8, 
     "title": "IBM Attrition: Survival Analysis", 
     "category": "HR Analytics",
     "linkType": "deck",
@@ -211,6 +196,35 @@
         "linkText": "View Dashboard",
         "link2": "https://github.com/ifathurrasyid/ibm_survival_analysis",
         "linkText2": "View Python Engine"
+      }
+    ]
+  },
+  {
+    "id": 8, 
+    "title": "Portfolio_OS", 
+    "category": "Others",
+    "styles": { "text": "text-white", "border": "hover:border-white/50", "pulse": "pulse-white", "shadow": "hover:shadow-[0_0_30px_#FFFFFF_inset]", "line": "via-white" },
+    "summary": "A high-performance, cyberpunk-themed portfolio mainframe I built from the ground up to centralize and showcase my entire spectrum of data analytics projects across multiple domains.",
+    "techStack": ["Next.js", "Framer Motion", "Tailwind CSS"], 
+    "projectUrl": "https://github.com/ifathurrasyid/fathsporto",
+    "details": [
+      { 
+        "subtitle": "The Context", 
+        "content": "I realized standard CVs lack the visceral, interactive depth necessary to truly showcase my multi-domain analytical skillset. I needed a centralized digital hub to compile all of my diverse data initiatives, ranging from automated pipelines to predictive modeling.", 
+        "image": "/portfolio_os/hero.png",
+        "gradient": "from-white/10 via-abyss to-abyss" 
+      },
+      { 
+        "subtitle": "The Architecture", 
+        "content": "I engineered a Next.js frontend with Tailwind CSS and Framer Motion for high-tech Cyberpunk aesthetics, writing custom React hooks for fluid scroll transparency and mobile touch state optimization.", 
+        "image": "/portfolio_os/work.png",
+        "gradient": "from-abyss via-white/5 to-abyss" 
+      },
+      { 
+        "subtitle": "The Outcome", 
+        "content": "A high-performance, responsive digital terminal that serves as both a comprehensive archive for my analytics projects and a live technical demonstration of my front-end engineering capabilities.", 
+        "image": "/portfolio_os/mobile_responsive.png",
+        "gradient": "from-abyss via-abyss to-white/10" 
       }
     ]
   }

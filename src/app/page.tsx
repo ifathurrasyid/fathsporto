@@ -130,7 +130,7 @@ const NavScrambleLink = ({ href, defaultText, hoverText, colorClass, onClick }: 
   );
 };
 
-const categories = ["All", "HR Analytics", "BI & Dashboards", "Automation", "Others"];
+const categories = ["All", "HR Analytics", "BI & Dashboards", "Statistical Analytics", "Automation", "Others"];
 
 // THE FIX: Removed GPU-heavy 'drop-shadow' from the filter string to fix scrolling lag.
 const extremeCrash: Variants = {
@@ -140,7 +140,7 @@ const extremeCrash: Variants = {
     filter: [
       "brightness(2) hue-rotate(90deg) blur(10px)",
       "brightness(1.5) hue-rotate(-90deg) blur(4px)",
-      "brightness(0.5) blur(2px)",
+      "brightness(0.5) hue-rotate(0deg) blur(2px)", /* <-- Added hue-rotate(0deg) here to fix the math */
       "brightness(1) hue-rotate(0deg) blur(0px)"
     ],
     transition: { duration: 0.5, times: [0, 0.4, 0.7, 1], ease: "anticipate" }
@@ -177,6 +177,7 @@ const pixelGrid = Array.from({ length: 140 }).map((_, i) => {
 });
 
 export default function Home() {
+  const [activeSegmentIndex, setActiveSegmentIndex] = useState(0);
   const [activeFilter, setActiveFilter] = useState("All");
   const filteredProjects = mockProjects.filter((p: Project) => activeFilter === "All" || p.category === activeFilter);
 
@@ -302,7 +303,7 @@ export default function Home() {
             <h1 className="text-5xl md:text-[5.5rem] leading-none font-roboto font-bold tracking-tighter text-starlight uppercase animate-pull-glitch">FATHURRASYID IBRAHIM</h1>
           </motion.span>
           <motion.div variants={powerUp} className="relative mt-6">
-            <p className="text-lg md:text-xl text-stardust leading-relaxed font-light max-w-2xl mx-auto block">I translate the complexity of real-world challenges into clarity—through data, through analysis, and through the quiet art of asking the right questions.</p>
+            <p className="text-lg md:text-xl text-stardust leading-relaxed font-light max-w-2xl mx-auto block">I translate the complexity of real-world challenges into clarity—through data, through analysis, and through the quiet art of asking the right questions, while leveraging AI to validate hypotheses and engineer solutions.</p>
           </motion.div>
           <motion.div variants={powerUp} className="pt-10">
             <Link 
@@ -330,9 +331,12 @@ export default function Home() {
             </h2>
             <div className="space-y-6 text-stardust font-light leading-relaxed">
               {/* Updated Bio to the new version! */}
-              <p>I am a <strong className="font-medium text-starlight pulse-white">Data Analyst</strong> with a deep foundation in Human Resources, though my expertise extends to solving complex challenges across any data-driven domain. I believe that behind every raw data point is a process, a friction point, or a story worth understanding.</p>
-              <p>My work lives at the intersection of complex analytics and actual human strategy. Whether I am querying databases with <strong className="font-medium text-starlight">SQL</strong>, applying <strong className="font-medium text-starlight">statistical rigor</strong> to identify patterns, or building automated <strong className="font-medium text-starlight">Python pipelines</strong> and <strong className="font-medium text-starlight">Excel models</strong> to simplify metrics into intuitive dashboards, my goal is always to turn complexity into decisions that make sense.</p>
-              <p className="italic font-inter text-starlight/60">Based in Subang. Translating data worldwide.</p>
+              <p>
+                I am a <strong className="font-medium text-starlight pulse-white">Data Analyst</strong> focused on turning complex operational friction into streamlined systems. By leveraging <strong className="font-medium text-starlight">SQL databases</strong>, <strong className="font-medium text-starlight">Python automation</strong>, <strong className="font-medium text-starlight">statistical modeling</strong>, and <strong className="font-medium text-starlight">interactive dashboards</strong>, I engineer scalable solutions that drive strategic decisions.
+                </p>
+              <p className="italic font-inter text-starlight/60">
+                Based in Subang. Translating data worldwide.
+              </p>
             </div>
           </motion.div>
 
@@ -438,7 +442,10 @@ export default function Home() {
                 <motion.div 
                   key={project.id} 
                   initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash} exit={{ opacity: 0, scale: 0.8, filter: "blur(10px)", transition: { duration: 0.3 } }} 
-                  onClick={() => setSelectedProject(project)}
+                  onClick={() => {
+                    setSelectedProject(project);
+                    setActiveSegmentIndex(0);
+                  }}
                   className={`bg-abyss/30 backdrop-blur-md p-10 rounded-3xl border border-white/5 ${project.styles.border} hover:bg-glass active:bg-glass ${project.styles.shadow} hover:scale-[1.04] active:scale-[1.02] hover:z-20 active:z-20 transition-all duration-500 group relative flex flex-col h-full text-left overflow-hidden cursor-pointer`}
                 >
                   <div className={`absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent ${project.styles.line} to-transparent transform origin-center scale-x-0 group-hover:scale-x-100 group-active:scale-x-100 transition-transform duration-700 ease-out z-20`}></div>
@@ -476,7 +483,7 @@ export default function Home() {
           </motion.div>
 
           <div className="relative">
-            <div className="absolute left-4 md:left-8 top-0 bottom-0 w-[1px] bg-gradient-to-b from-cyan via-purple-500 to-neon-red opacity-30"></div>
+            <div className="absolute left-4 md:left-8 top-0 bottom-0 w-[1px] bg-[linear-gradient(to_bottom,#00F0FF_0%,#A855F7_33%,#FF003C_66%,#FF5E00_100%)] opacity-30"></div>
             
             <div className="flex flex-col gap-8">
               {careerLogs.map((log, index) => (
@@ -554,21 +561,37 @@ export default function Home() {
       {/* 5. CONSISTENT SPACING: Changed pt-20 pb-4 to py-24 */}
       <section id="contact" className="py-24 scroll-mt-24 relative w-full bg-gradient-to-b from-neon-yellow/3 to-neon-yellow/3">
         <div className="absolute bottom-[-100px] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-neon-yellow/3 rounded-full blur-[120px] pointer-events-none animate-neon-breath z-0" style={{ animationDelay: '1.5s' }}></div>
-        <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center w-full relative z-10">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash}>
+        
+        {/* THE ORCHESTRATOR: Parent motion.div controls the stagger sequence */}
+        <motion.div 
+          initial="hidden" 
+          whileInView="visible" 
+          viewport={{ once: false, margin: "-50px" }} 
+          variants={{
+            hidden: { transition: { staggerChildren: 0.15, staggerDirection: -1 } },
+            visible: { transition: { staggerChildren: 0.3 } }
+          }}
+          className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center w-full relative z-10"
+        >
+          {/* LEFT BLOCK: Appears first, disappears last */}
+          <motion.div variants={extremeCrash}>
             <p className="font-roboto text-[10px] tracking-[0.4em] uppercase text-neon-yellow mb-4 pulse-yellow">05_Initialize_Contact</p>
             <h2 className="text-4xl md:text-5xl font-inter font-light leading-tight mb-6 text-starlight">
               <span className="block">Let's make</span> 
               <span className="inline-block pulse-yellow"><span className="font-bold text-neon-yellow animate-pull-glitch block">data make sense.</span></span>
             </h2>
-            <p className="text-stardust font-light mb-10 max-w-md">Currently open for new opportunities. Whether you need a complex pipeline built or a dashboard simplified, I'm ready to help.</p>
+            <p className="text-stardust font-light mb-10 max-w-md leading-relaxed">
+              Actively open for new opportunities. Available for <strong className="text-starlight font-medium pulse-white">full-time</strong> or <strong className="text-starlight font-medium pulse-white">freelance</strong> data engagements across <span className="text-neon-yellow font-medium animate-pulse">remote, hybrid, or on-site</span> environments.
+            </p>
           </motion.div>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: false }} variants={extremeCrash} className="flex flex-col gap-6 md:pl-16">
+          
+          {/* RIGHT BLOCK (SOCMED): Appears second, disappears first */}
+          <motion.div variants={extremeCrash} className="flex flex-col gap-6 md:pl-16">
             <ContactLink href="mailto:ifathurra@gmail.com" defaultText="Email" hoverText="3M41L" />
             <ContactLink href="https://linkedin.com/in/ifathurrasyid" defaultText="LinkedIn" hoverText="L1NK3D1N" />
             <ContactLink href="https://www.instagram.com/ifathurrasyid/" defaultText="Instagram" hoverText="1N574GR4M" />
           </motion.div>
-        </div>
+        </motion.div>
         
         {/* Tightened Footer Spacing */}
         {/* 4. REMOVED FOOTER LINE: Deleted 'border-t border-white/5' */}
@@ -614,7 +637,7 @@ export default function Home() {
               <div className="px-4 md:px-6 py-4 border-b border-white/5 flex justify-between items-start bg-[#010308] shrink-0 gap-4">
                 <div className="flex flex-col min-w-0 flex-1">
                    <span className={`font-mono text-xs tracking-[0.2em] uppercase ${selectedCareer.styles.text} animate-micro-glitch block break-words whitespace-normal leading-relaxed`}>
-                     sys.log.query({selectedCareer.company.replace(/\s+/g, '_')})
+                      sys.log.query({selectedCareer.company.replace(/\s+/g, '_')})
                    </span>
                 </div>
                 <button onClick={() => window.history.back()} className="text-stardust hover:text-neon-red active:text-neon-red transition-colors pulse-red font-mono uppercase text-xs tracking-widest p-2 -mt-2 -mr-2 shrink-0">
@@ -670,7 +693,9 @@ export default function Home() {
                 <div className="flex justify-between md:justify-end items-center gap-2 md:gap-4 shrink-0 w-full md:w-auto">
                   {selectedProject.projectUrl !== "#" && (
                     <a 
-                      href={selectedProject.projectUrl} target="_blank" 
+                      href={selectedProject.projectUrl} 
+                      target="_blank" 
+                      download={selectedProject.linkType === 'excel' ? true : undefined}
                       onMouseEnter={() => setRepoHovered(true)} onMouseLeave={() => setRepoHovered(false)}
                       className={`group relative text-[10px] font-roboto font-bold tracking-widest uppercase border border-white/10 px-4 md:px-6 py-2 rounded-full hover:bg-white/5 active:bg-white/5 transition-colors ${selectedProject.styles.text} flex items-center justify-center min-w-[140px] md:min-w-[220px]`}
                     >
@@ -680,17 +705,20 @@ export default function Home() {
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v16H4V4zm8 5h8v11h-8V9zm0-5h8v3h-8V4z" /></svg>
                         ) : selectedProject.linkType === 'deck' ? (
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1zm-3.5-9h-5c-.28 0-.5.22-.5.5v3c0 .28.22.5.5.5h5c.28 0 .5-.22.5-.5v-3c0-.28-.22-.5-.5-.5z"/></svg>
+                        ) : selectedProject.linkType === 'excel' ? (
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h12c1.11 0 2-.89 2-2V8l-6-6zm-4 14H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V6h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V6h2v2zm-3-6V3.5L18.5 9H13z"/></svg>
                         ) : (
                           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
                         )}
                       </span>
                       <span className="transform md:group-hover:translate-x-3 md:group-active:translate-x-3 transition-transform duration-300">
-                        {/* TEXT RENDERER LOGIC */}
                         <ScrambleText 
                           defaultText="[ Execute_Link ]" 
                           hoverText={
                             selectedProject.linkType === 'tableau' || selectedProject.linkType === 'looker' || selectedProject.linkType === 'metabase' ? "[ ACCESS_DASHBOARD ]" : 
-                            selectedProject.linkType === 'deck' ? "[ ACCESS_DECK ]" : "[ ACCESS_REPO ]"
+                            selectedProject.linkType === 'deck' ? "[ ACCESS_DECK ]" : 
+                            selectedProject.linkType === 'excel' ? "[ DOWNLOAD_EXCEL ]" : 
+                            "[ ACCESS_REPO ]"
                           } 
                           isHovering={repoHovered} 
                         />
@@ -703,51 +731,86 @@ export default function Home() {
                 </div>
               </div>
               
-              {/* MODAL CONTENT */}
-              <div className="flex-1 overflow-y-auto overflow-x-hidden relative scroll-smooth">
-                {selectedProject.details.map((detail: any, idx: number) => (
-                  <div key={idx} className="min-h-auto md:min-h-[85vh] w-full md:sticky md:top-0 flex flex-col md:flex-row bg-[#03060D] border-b border-white/5 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+              {/* MODAL CONTENT: OS SLIDER ARCHITECTURE */}
+              <div className="flex-1 overflow-hidden relative bg-[#03060D]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeSegmentIndex}
+                    initial={{ opacity: 0, filter: "blur(8px)", x: 20 }}
+                    animate={{ opacity: 1, filter: "blur(0px)", x: 0 }}
+                    exit={{ opacity: 0, filter: "blur(8px)", x: -20 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="absolute inset-0 flex flex-col md:flex-row w-full h-full"
+                  >
                     
-                    {/* TEXT HALF */}
-                    <div className="w-full md:w-[35%] lg:w-[30%] p-8 md:p-14 flex flex-col justify-center bg-[#010308] z-20 md:border-r border-white/5 md:shadow-xl">
-                      <p className={`font-roboto text-[10px] tracking-[0.4em] uppercase ${selectedProject.styles.text} mb-4 ${selectedProject.styles.pulse}`}>
-                        0{idx + 1}_Segment
-                      </p>
-                      <h3 className="text-2xl md:text-4xl font-inter font-light text-starlight leading-tight mb-4 md:mb-6">
-                        {detail.subtitle}
-                      </h3>
-                      <p className="text-stardust font-light text-base md:text-lg leading-relaxed">
-                        {detail.content}
-                      </p>
-                      {/* THE FIX: Only render this link if it is different from the main project header link */}
-                      {detail.link && detail.link !== selectedProject.projectUrl && (
-                        <div className="mt-6 md:mt-8">
-                          <a href={detail.link} target="_blank" className={`group/link inline-flex items-center gap-3 font-roboto text-xs font-bold uppercase tracking-[0.2em] border border-white/10 px-6 py-3 rounded-full hover:bg-white/5 active:bg-white/5 transition-all duration-300 ${selectedProject.styles.text} hover:scale-105 active:scale-95`}>
-                            <span>[ {detail.linkText || "EXECUTE_LINK"} ]</span>
-                            <svg className="w-4 h-4 animate-pulse group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-active/link:translate-x-1 group-active/link:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                          </a>
+                    {/* TEXT HALF: Fixed Justification to 'justify-start' */}
+                    <div className="w-full md:w-[40%] lg:w-[35%] p-6 md:p-8 lg:p-12 flex flex-col justify-start bg-[#010308] z-20 md:border-r border-white/5 md:shadow-xl h-auto md:h-full overflow-y-auto pt-8 md:pt-16">
+                      
+                      <div className="flex-1">
+                        <p className={`font-roboto text-[10px] tracking-[0.4em] uppercase ${selectedProject.styles.text} mb-3 md:mb-4 ${selectedProject.styles.pulse}`}>
+                          0{activeSegmentIndex + 1}_Segment
+                        </p>
+                        <h3 className="text-2xl md:text-3xl lg:text-4xl font-inter font-light text-starlight leading-tight mb-3 md:mb-5">
+                          {selectedProject.details[activeSegmentIndex].subtitle}
+                        </h3>
+                        <p className="text-stardust font-light text-sm md:text-base lg:text-lg leading-relaxed">
+                          {selectedProject.details[activeSegmentIndex].content}
+                        </p>
+                        
+                        {/* Detail-specific execute link */}
+                        {selectedProject.details[activeSegmentIndex].link && selectedProject.details[activeSegmentIndex].link !== selectedProject.projectUrl && (
+                          <div className="mt-6 md:mt-8">
+                            <a href={selectedProject.details[activeSegmentIndex].link} target="_blank" className={`group/link inline-flex items-center gap-3 font-roboto text-xs font-bold uppercase tracking-[0.2em] border border-white/10 px-6 py-3 rounded-full hover:bg-white/5 active:bg-white/5 transition-all duration-300 ${selectedProject.styles.text} hover:scale-105 active:scale-95`}>
+                              <span>[ {selectedProject.details[activeSegmentIndex].linkText || "EXECUTE_LINK"} ]</span>
+                              <svg className="w-4 h-4 animate-pulse group-hover/link:translate-x-1 group-hover/link:-translate-y-1 group-active/link:translate-x-1 group-active/link:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                            </a>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* OS SLIDER CONTROLS (Anchored to bottom of text) */}
+                      <div className="mt-12 pt-6 border-t border-white/5 flex items-center justify-between z-50 shrink-0">
+                        <button 
+                          onClick={() => setActiveSegmentIndex(Math.max(0, activeSegmentIndex - 1))}
+                          disabled={activeSegmentIndex === 0}
+                          className={`font-mono text-[10px] tracking-widest uppercase transition-colors px-2 py-1 ${activeSegmentIndex === 0 ? 'text-white/10 cursor-not-allowed' : 'text-stardust hover:text-white pulse-white'}`}
+                        >
+                          {'[ < PREV ]'}
+                        </button>
+                        
+                        <div className="font-mono text-[10px] tracking-[0.3em] text-starlight">
+                          0{activeSegmentIndex + 1} <span className="text-white/20">/</span> 0{selectedProject.details.length}
                         </div>
-                      )}
+
+                        <button 
+                          onClick={() => setActiveSegmentIndex(Math.min(selectedProject.details.length - 1, activeSegmentIndex + 1))}
+                          disabled={activeSegmentIndex === selectedProject.details.length - 1}
+                          className={`font-mono text-[10px] tracking-widest uppercase transition-colors px-2 py-1 ${activeSegmentIndex === selectedProject.details.length - 1 ? 'text-white/10 cursor-not-allowed' : 'text-stardust hover:text-white pulse-white'}`}
+                        >
+                          {'[ NEXT > ]'}
+                        </button>
+                      </div>
+
                     </div>
                     
                     {/* IMAGE HALF */}
-                    <div className="w-full md:w-[65%] lg:w-[70%] h-[40vh] md:min-h-[85vh] relative overflow-hidden z-10 bg-[#03060D]">
+                    <div className="w-full md:w-[60%] lg:w-[65%] h-[40vh] md:h-full relative overflow-hidden z-10 bg-[#03060D]">
                       <div className="absolute inset-0 p-4 md:p-16 flex items-center justify-center z-30">
-                        {detail.image ? (
-                          <img src={detail.image} alt={detail.subtitle} className="max-w-full max-h-full object-contain opacity-95 drop-shadow-[0_0_25px_rgba(0,240,255,0.3)]" />
+                        {selectedProject.details[activeSegmentIndex].image ? (
+                          <img src={selectedProject.details[activeSegmentIndex].image} alt={selectedProject.details[activeSegmentIndex].subtitle} className="max-w-full max-h-full object-contain opacity-95 drop-shadow-[0_0_25px_rgba(0,240,255,0.3)]" />
                         ) : (
-                          <div className={`absolute inset-0 bg-gradient-to-br ${detail.gradient} opacity-40 z-10`}></div>
+                          <div className={`absolute inset-0 bg-gradient-to-br ${selectedProject.details[activeSegmentIndex].gradient} opacity-40 z-10`}></div>
                         )}
                       </div>
                       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0)_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px] pointer-events-none opacity-40 z-40"></div>
                       <div className="absolute inset-0 grain-overlay opacity-20 pointer-events-none z-40"></div>
                       <div className="absolute inset-4 border border-white/5 rounded-xl pointer-events-none z-50"></div>
                       <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 font-mono text-[8px] tracking-[0.3em] text-white/30 uppercase z-50">
-                        {detail.image ? `SYS.IMG.0${idx + 1}` : `SYS.DAT.0${idx + 1}`}
+                        {selectedProject.details[activeSegmentIndex].image ? `SYS.IMG.0${activeSegmentIndex + 1}` : `SYS.DAT.0${activeSegmentIndex + 1}`}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </motion.div>
           </motion.div>

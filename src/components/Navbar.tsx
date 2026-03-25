@@ -38,8 +38,8 @@ const ScrambleText = ({ defaultText, hoverText, isHovering }: { defaultText: str
 };
 
 // --- WRAPPER COMPONENTS FOR CLEAN HOVER CONTROL ---
-// THE FIX: Added 'isActive' and 'activeColor' to trigger the effect based on scroll position
-const NavLink = ({ href, name, glitch, colorClass, activeColor, lineClass, isActive, onClick }: { href: string, name: string, glitch: string, colorClass: string, activeColor: string, lineClass: string, isActive: boolean, onClick?: () => void }) => {
+// THE FIX: Added React.MouseEvent type to onClick to allow e.preventDefault()
+const NavLink = ({ href, name, glitch, colorClass, activeColor, lineClass, isActive, onClick }: { href: string, name: string, glitch: string, colorClass: string, activeColor: string, lineClass: string, isActive: boolean, onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void }) => {
   const [isHovered, setIsHovered] = useState(false);
   
   // Activate if the user is hovering OR if the scrollspy says this section is active
@@ -66,31 +66,51 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
 
-  // THE FIX: Scrollspy engine added to your existing scroll listener
+  // THE FIX: Replaced bounding calculations with high-performance IntersectionObserver
   useEffect(() => {
+    // 1. Keep the background blur effect trigger
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
-      
-      const sections = ["hero", "about", "work", "career", "credentials", "contact"];
-      let current = "";
-      
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // Triggers when the top of the section hits the upper middle of the screen
-          if (rect.top <= window.innerHeight / 2.5) {
-            current = section;
-          }
-        }
-      }
-      setActiveSection(current);
     };
-
     window.addEventListener("scroll", handleScroll);
     handleScroll(); // Trigger once on load
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    // 2. The IntersectionObserver for accurate Mobile & Desktop Scroll Spy
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      // Triggers when a section hits the middle 40% of the viewport. Perfect for mobile tall screens.
+      { rootMargin: "-40% 0px -40% 0px" } 
+    );
+
+    // Observe all sections
+    const sections = document.querySelectorAll("section[id]");
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      sections.forEach((section) => observer.unobserve(section));
+    };
   }, []);
+
+  // THE FIX: The Force Execution Click Handler
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault(); // Stop standard jump
+    
+    setMobileMenuOpen(false); // Force menu close immediately
+    setActiveSection(targetId); // Force UI active state immediately
+
+    // Execute smooth scroll manually
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const navLinks = [
     { id: "about", name: "About", glitch: "AB0U7", href: "#about", activeColor: "text-neon-red", colorClass: "hover:text-neon-red active:text-neon-red", lineClass: "bg-neon-red" },
@@ -112,7 +132,14 @@ export default function Navbar() {
           
           {/* LOGO & STAR */}
           <div className="flex items-center gap-4">
-            <Link href="#hero" onClick={() => setSpinClicks(prev => prev + 1)} className="cursor-pointer outline-none block">
+            <Link 
+              href="#hero" 
+              onClick={(e) => {
+                setSpinClicks(prev => prev + 1);
+                handleNavClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, 'hero');
+              }} 
+              className="cursor-pointer outline-none block"
+            >
               <div className="animate-[spin_10s_linear_infinite] flex items-center justify-center">
                 {/* 1. LARGER STAR (w-10 h-10) */}
                 <motion.svg 
@@ -127,6 +154,7 @@ export default function Navbar() {
             </Link>
             <Link 
               href="#hero" 
+              onClick={(e) => handleNavClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, 'hero')}
               onMouseEnter={() => setLogoHovered(true)} 
               onMouseLeave={() => setLogoHovered(false)}
               /* 1. LARGER LOGO (text-base) */
@@ -144,6 +172,7 @@ export default function Navbar() {
                 key={link.id} 
                 isActive={activeSection === link.id} 
                 {...link} 
+                onClick={(e) => handleNavClick(e, link.id)}
               />
             ))}
           </div>
@@ -182,7 +211,7 @@ export default function Navbar() {
                   key={link.id} 
                   isActive={activeSection === link.id}
                   {...link} 
-                  onClick={() => setMobileMenuOpen(false)} 
+                  onClick={(e) => handleNavClick(e, link.id)} 
                 />
               ))}
             </div>
