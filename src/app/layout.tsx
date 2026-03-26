@@ -4,20 +4,20 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 
 // Initialize the new fonts
-const roboto = Roboto({ 
-  weight: ['300', '400', '500', '700'], 
-  subsets: ["latin"], 
-  variable: '--font-roboto' 
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
+  subsets: ["latin"],
+  variable: '--font-roboto'
 });
 
-const interTight = Inter_Tight({ 
-  weight: ['300', '400', '600', '700'], 
-  subsets: ["latin"], 
-  variable: '--font-inter-tight' 
+const interTight = Inter_Tight({
+  weight: ['300', '400', '600', '700'],
+  subsets: ["latin"],
+  variable: '--font-inter-tight'
 });
 
 export const metadata: Metadata = {
-  title: "Fath | Data Professional & Creative",
+  title: "fathuri",
   description: "Portfolio of Analytics, Data Science, and Automation",
 };
 
