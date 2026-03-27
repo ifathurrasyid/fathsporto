@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { Analytics } from "@vercel/analytics/next"; // <-- Vercel Analytics import added here
 
 // Initialize the new fonts
 const roboto = Roboto({
@@ -34,6 +35,8 @@ export default function RootLayout({
         <main className="w-full">
           {children}
         </main>
+        {/* Render Analytics at the bottom of the body */}
+        <Analytics />
       </body>
     </html>
   );
