@@ -1,45 +1,35 @@
 # 🌐 Portfolio_OS // Cyberpunk Analytics Terminal
 
-![Mainframe Interface](public/portfolio_os/mainframe_hero.png)
-
 ## 🚀 Overview
-Standard resumes and traditional portfolios lack the visceral, interactive depth necessary to truly showcase a technical skillset. **Portfolio_OS** is a high-performance, cyberpunk-themed digital terminal designed to translate complex HR analytics and automation engineering into tactical, visual clarity.
+Standard resumes often fail to capture the multidimensional nature of technical data projects. **Portfolio_OS** is a custom-built, high-performance digital terminal designed to translate complex HR analytics, predictive modeling, and automation engineering into clear, tactile visual narratives.
 
-Built with **Next.js, Tailwind CSS, and Framer Motion**, this project serves as both a central hub for my data engineering projects and a live technical demonstration of modern frontend architecture.
-
----
-
-## ✨ System Features
-* **Extreme Cyberpunk Aesthetic:** Dark mode native, featuring neon glows, custom pulse animations, and deep abyss gradients to keep users visually engaged.
-* **Tactile Interactivity:** Heavily utilizes Framer Motion and Tailwind hover states to create a responsive, software-like feel rather than a static webpage.
-* **Dynamic Data Rendering:** Project architectures, tech stacks, and detailed image carousels are rendered dynamically from a central JSON architecture, allowing for instant scalability as new projects are added.
-* **Mobile-First Responsiveness:** Features custom React hooks to handle touch states, scroll transparency, and perfect flexbox scaling across any device size.
+Engineered with **Next.js, Tailwind CSS, and Framer Motion**, this centralized hub serves a dual purpose: it acts as a comprehensive archive for my data science initiatives while functioning as a live technical demonstration of modern frontend architecture and UI/UX design.
 
 ---
 
-## 📸 Interface Showcase
-
-### 1. The Interactive UI
-Tactile hover states and dynamic gradients guide the user's eye directly to the project architecture.
-![Project Cards](public/portfolio_os/interactive_ui.png)
-
-### 2. Mobile Terminal
-Flawless vertical scaling ensures the terminal is fully operational and visually striking on any mobile device.
-![Mobile View](public/portfolio_os/mobile_responsive.png)
+## ✨ System Architecture & Features
+* **Data-Driven UI Engine:** Project details, technical stacks, and layouts are rendered dynamically from a lightweight, centralized JSON architecture, ensuring rapid rendering and seamless scalability without database overhead.
+* **Tactile Cyberpunk Aesthetic:** Built with a dark-mode native design system featuring custom hex-based neon glows (`pulse-cyan`, `text-neon-orange`), deep abyss gradients, and high-contrast typography to maintain visual engagement.
+* **Fluid Interactivity:** Utilizes Framer Motion for seamless page transitions and dynamic component mounting, combined with advanced Tailwind hover states to create a responsive, software-like experience.
+* **Mobile-First Responsiveness:** Implements custom React hooks to manage touch states, scroll-linked transparency, and flawless vertical scaling across all device viewports.
 
 ---
 
 ## 🛠️ Tech Stack
-* **Framework:** Next.js (React)
-* **Styling:** Tailwind CSS (Custom neon configurations, complex gradients)
-* **Animation:** Framer Motion (Page transitions, dynamic mounting)
-* **Deployment:** Vercel 
+* **Core Framework:** Next.js (React)
+* **Styling Engine:** Tailwind CSS 
+* **Animation & Physics:** Framer Motion
+* **Data Layer:** Pure JSON Architecture
+* **Deployment Infrastructure:** Vercel 
 
 ---
 
-## ⚙️ Initialization
-To boot the terminal locally:
-1. Clone this repository.
-2. Install dependencies: `npm install`
-3. Start the development server: `npm run dev`
-4. Access the mainframe at `http://localhost:3000`
+## ⚙️ Initialization Protocol
+To boot the terminal in a local development environment:
+
+1. Clone this repository to your local machine.
+2. Install the necessary dependencies: `npm install`
+3. Ignite the development server: `npm run dev`
+4. Access the local mainframe at `http://localhost:3001`
+
+> **System Note on Ports:** > The development server is explicitly configured to run on port `3001` to prevent conflicts with other standard local applications. If you wish to revert this to the standard `3000`, simply modify the `"dev"` script inside the `package.json` file (e.g., change `"dev": "next dev -p 3001"` to `"dev": "next dev"`).
