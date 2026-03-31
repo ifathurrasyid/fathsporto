@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Roboto, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import { Analytics } from "@vercel/analytics/next"; // <-- Vercel Analytics import added here
+import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from '@next/third-parties/google'; // <-- The new official import
 
 // Initialize the new fonts
 const roboto = Roboto({
@@ -29,14 +30,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      {/* Apply the font variables to the body */}
       <body className={`${roboto.variable} ${interTight.variable} font-roboto bg-abyss text-starlight antialiased`}>
         <Navbar />
         <main className="w-full">
           {children}
         </main>
-        {/* Render Analytics at the bottom of the body */}
+        
+        {/* Vercel Server Analytics */}
         <Analytics />
+
+        {/* Official Google Analytics Engine */}
+        <GoogleAnalytics gaId="G-QDDJSQ6DP0" />
       </body>
     </html>
   );
