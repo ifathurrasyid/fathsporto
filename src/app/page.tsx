@@ -130,7 +130,7 @@ const NavScrambleLink = ({ href, defaultText, hoverText, colorClass, onClick }: 
   );
 };
 
-const categories = ["All", "HR Analytics", "BI & Dashboards", "Statistical Analytics", "Automation", "Others"];
+const categories = ["All", "Predictive Analytics", "Business Intelligence", "Statistical Analytics", "Process Automation", "Frontend Engineering"];
 
 // THE FIX: Removed GPU-heavy 'drop-shadow' from the filter string to fix scrolling lag.
 const extremeCrash: Variants = {
