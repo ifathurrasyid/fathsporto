@@ -5,7 +5,7 @@
     "category": "Predictive Analytics",
     "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
     "summary": "An XGBoost predictive engine identifying high-risk employees with ~70% recall. Features SHAP explainability to translate machine learning into actionable executive strategy.",
-    "techStack": ["Python", "XGBoost", "SHAP", "Scikit-Learn", "HR Analytics"], 
+    "techStack": ["Python", "XGBoost", "SHAP", "Scikit-Learn", "Pandas", "HR Analytics"], 
     "projectUrl": "https://github.com/ifathurrasyid/turnover_prediction_xgboost_SHAP",
     "details": [
       { 
@@ -34,7 +34,7 @@
     "category": "Predictive Analytics",
     "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
     "summary": "Using Python, Pandas, and XGBoost with EWMA lag features to predict employee absences for April 2026, assisting leadership in proactive workforce planning.",
-    "techStack": ["Python", "Pandas", "XGBoost", "EWMA", "HR Analytics"], 
+    "techStack": ["Python", "Pandas", "XGBoost", "EWMA", "Time-Series", "HR Analytics"], 
     "projectUrl": "https://github.com/ifathurrasyid/sickness_prediction_EWMA",
     "details": [
       { "subtitle": "The Architecture", "content": "Engineered a robust time-series pipeline using Pandas to build Exponentially Weighted Moving Average (EWMA) lag features, feeding into an optimized XGBoost regressor. The model captured complex seasonal sickness trends.", "image": "/sickness_prediction_ewma/sys_img_00.png", "gradient": "from-cyan/10 via-abyss to-abyss" },
@@ -49,7 +49,7 @@
     "linkType": "tableau",
     "styles": { "text": "text-purple-400", "border": "hover:border-purple-500/50", "pulse": "pulse-purple", "shadow": "hover:shadow-[0_0_30px_#A855F7_inset]", "line": "via-purple-500" },
     "summary": "An interactive, executive-level Tableau dashboard tracking core retail KPIs, sales trends, and profitability metrics for the Wishful Bazaar dataset.",
-    "techStack": ["Tableau", "Data Viz", "Retail Analytics"], 
+    "techStack": ["Tableau", "Data Visualization", "Retail Analytics", "Business Intelligence"], 
     "projectUrl": "https://public.tableau.com/views/W9W10IntermediateAssignment_17341667593720/Dashboard",
     "image": "/wishful_bazaar/wishful_bazaar_dashboard.png",
     "details": [
@@ -81,7 +81,7 @@
     "category": "Process Automation",
     "styles": { "text": "text-neon-orange", "border": "hover:border-neon-orange/50", "pulse": "pulse-orange", "shadow": "hover:shadow-[0_0_30px_#FF6600_inset]", "line": "via-neon-orange" },
     "summary": "An end-to-end Python pipeline utilizing python-pptx to dynamically generate customized, executive-ready PowerPoint slide decks from a master dataset.",
-    "techStack": ["Python", "python-pptx", "Pandas", "HR Analytics"], 
+    "techStack": ["Python", "python-pptx", "Pandas", "Data Transformation", "HR Analytics"], 
     "projectUrl": "https://github.com/ifathurrasyid/360_review_automator",
     "details": [
       {
@@ -111,7 +111,7 @@
     "linkType": "excel",
     "styles": { "text": "text-emerald-400", "border": "hover:border-emerald-500/50", "pulse": "pulse-emerald", "shadow": "hover:shadow-[0_0_30px_#10B981_inset]", "line": "via-emerald-500" },
     "summary": "Investigated the true drivers of supermarket transaction values using T-Tests and Multiple Linear Regression, uncovering how omitted variable bias skewed initial membership performance metrics.",
-    "techStack": ["Excel", "Statistical Modeling", "Linear Regression", "Retail Analytics"], 
+    "techStack": ["Excel", "Statistical Modeling", "Multiple Linear Regression", "T-Test", "Retail Analytics"], 
     "projectUrl": "/supermarket_sales/Supermarket_Transaction_Analysis.xlsx",
     "details": [
       {
@@ -140,7 +140,7 @@
     "category": "Process Automation",
     "styles": { "text": "text-neon-orange", "border": "hover:border-neon-orange/50", "pulse": "pulse-orange", "shadow": "hover:shadow-[0_0_30px_#FF6600_inset]", "line": "via-neon-orange" },
     "summary": "Engineered a dynamic Python utility for bulk QR code generation, automating trackable links for HR surveys, event registrations, and internal campaigns.",
-    "techStack": ["Python", "Pillow (PIL)", "OS", "HR Analytics"], 
+    "techStack": ["Python", "Pillow (PIL)", "qrcode", "Multithreading", "HR Analytics"], 
     "projectUrl": "https://github.com/ifathurrasyid/qr_code_generator",
     "details": [
       { 
@@ -170,7 +170,7 @@
     "linkType": "deck",
     "styles": { "text": "text-cyan", "border": "hover:border-cyan/50", "pulse": "pulse-cyan", "shadow": "hover:shadow-[0_0_30px_#00F0FF_inset]", "line": "via-cyan" },
     "summary": "Applied Kaplan-Meier estimators and Cox Proportional Hazards models to IBM's HR dataset to calculate precise time-to-event attrition risks.",
-    "techStack": ["Python", "Survival Analysis", "Looker Studio", "HR Analytics"], 
+    "techStack": ["Python", "Survival Analysis", "lifelines", "Looker Studio", "Pandas", "HR Analytics"], 
     "projectUrl": "https://docs.google.com/presentation/d/1kAU2CKCQhH9MQP3ImBQgxeguAIZG2rpojnZJRWLIPGg/edit?usp=sharing",
     "details": [
       {
@@ -205,7 +205,7 @@
     "category": "Frontend Engineering",
     "styles": { "text": "text-white", "border": "hover:border-white/50", "pulse": "pulse-white", "shadow": "hover:shadow-[0_0_30px_#FFFFFF_inset]", "line": "via-white" },
     "summary": "A high-performance, cyberpunk-themed portfolio mainframe I built from the ground up to centralize and showcase my entire spectrum of data analytics projects across multiple domains.",
-    "techStack": ["Next.js", "Framer Motion", "Tailwind CSS"], 
+    "techStack": ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vercel"], 
     "projectUrl": "https://github.com/ifathurrasyid/fathsporto",
     "details": [
       { 
